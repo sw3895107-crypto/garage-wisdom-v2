@@ -94,9 +94,14 @@
             letter-spacing:0.05em;
         }
         
-        .search-box{
+        .search-container{
             width:100%;
             max-width:600px;
+            position:relative;
+        }
+        
+        .search-box{
+            width:100%;
             position:relative;
         }
         
@@ -126,6 +131,73 @@
             outline:none;
             border-color:var(--orange);
             box-shadow:0 0 20px rgba(255,69,0,0.3);
+        }
+        
+        .search-suggestions{
+            position:absolute;
+            top:100%;
+            left:0;
+            right:0;
+            background:var(--dark);
+            border:1px solid rgba(255,255,255,0.1);
+            border-top:none;
+            border-radius:0 0 8px 8px;
+            max-height:300px;
+            overflow-y:auto;
+            display:none;
+            z-index:100;
+        }
+        
+        .search-suggestions.active{display:block}
+        
+        .suggestion-item{
+            padding:0.75rem 1rem;
+            cursor:pointer;
+            border-bottom:1px solid rgba(255,255,255,0.05);
+            display:flex;
+            align-items:center;
+            gap:0.75rem;
+        }
+        
+        .suggestion-item:hover{
+            background:rgba(255,69,0,0.1);
+        }
+        
+        .suggestion-code{
+            background:var(--orange);
+            color:#fff;
+            padding:0.25rem 0.5rem;
+            border-radius:4px;
+            font-size:0.75rem;
+            font-weight:700;
+        }
+        
+        .suggestion-text{
+            font-size:0.9rem;
+        }
+        
+        .search-tags{
+            display:flex;
+            gap:0.5rem;
+            margin-top:1rem;
+            flex-wrap:wrap;
+            justify-content:center;
+        }
+        
+        .search-tag{
+            background:rgba(255,69,0,0.2);
+            border:1px solid var(--orange);
+            color:var(--orange);
+            padding:0.5rem 1rem;
+            border-radius:20px;
+            font-size:0.85rem;
+            cursor:pointer;
+            transition:all 0.3s;
+        }
+        
+        .search-tag:hover{
+            background:var(--orange);
+            color:#fff;
         }
         
         .nav{
@@ -775,6 +847,20 @@
             margin-bottom:1rem;
         }
         
+        .search-results-info{
+            background:var(--steel);
+            padding:1rem;
+            border-radius:8px;
+            margin-bottom:1.5rem;
+            text-align:center;
+        }
+        
+        .search-highlight{
+            background:rgba(255,69,0,0.3);
+            padding:0.125rem 0.25rem;
+            border-radius:3px;
+        }
+        
         .footer{
             background:var(--dark);
             padding:3rem 2rem;
@@ -845,6 +931,7 @@
             .story-grid{grid-template-columns:1fr}
             .cost-grid{grid-template-columns:1fr}
             .donate-buttons{flex-direction:column;align-items:center}
+            .search-tags{display:none}
         }
     </style>
 </head>
@@ -869,8 +956,20 @@
             </div>
             <h1>Real Fixes for <span>Real Rides</span></h1>
             <p>No bullshit. No $1200 dealer quotes. Just the exact repair that worked.</p>
-            <div class="search-box">
-                <input type="text" placeholder="Enter code (P0420) or problem..." id="searchInput">
+            <div class="search-container">
+                <div class="search-box">
+                    <input type="text" placeholder="Search codes, symptoms, parts, vehicles..." id="searchInput" autocomplete="off">
+                </div>
+                <div class="search-suggestions" id="searchSuggestions"></div>
+                <div class="search-tags">
+                    <span class="search-tag" onclick="quickSearch('P0420')">P0420 Cat</span>
+                    <span class="search-tag" onclick="quickSearch('misfire')">Misfire</span>
+                    <span class="search-tag" onclick="quickSearch('O2 sensor')">O2 Sensor</span>
+                    <span class="search-tag" onclick="quickSearch('Honda')">Honda</span>
+                    <span class="search-tag" onclick="quickSearch('Ford')">Ford</span>
+                    <span class="search-tag" onclick="quickSearch('lean')">Lean Code</span>
+                    <span class="search-tag" onclick="quickSearch('EVAP')">EVAP Leak</span>
+                </div>
             </div>
         </div>
     </section>
@@ -951,10 +1050,11 @@
                 <h2 id="gridTitle">Latest Battle-Tested Fixes</h2>
                 <p id="gridSubtitle">Stories from the garage, not the dealership</p>
             </div>
+            <div class="search-results-info" id="searchResultsInfo" style="display:none"></div>
             <div class="story-grid" id="storyGrid"></div>
             <div class="no-results" id="noResults" style="display:none">
                 <h3>No fixes found</h3>
-                <p>Try searching for P0420, misfire, or your specific code</p>
+                <p>Try searching for: <strong>P0420</strong>, <strong>misfire</strong>, <strong>Honda</strong>, <strong>coil</strong>, <strong>leak</strong>, or <strong>sensor</strong></p>
                 <button class="btn" onclick="clearFilter()" style="margin-top:1rem">Show All Fixes</button>
             </div>
         </section>
@@ -2359,6 +2459,22 @@
             }
         ];
 
+        // Search index for better matching
+        const searchIndex = stories.map(story => ({
+            ...story,
+            searchText: [
+                story.code,
+                story.title,
+                story.vehicle,
+                story.author,
+                story.problem,
+                story.proTip,
+                story.verdict,
+                ...story.rabbitHole.map(r => r.title + ' ' + r.desc),
+                ...story.fix.map(f => f.title + ' ' + f.desc)
+            ].join(' ').toLowerCase()
+        }));
+
         let currentFilter='all';
         let currentStory=null;
 
@@ -2367,7 +2483,134 @@
             renderStories(stories.filter(s=>s.success>50),'popularGrid');
             updateStats();
             
-            document.getElementById('searchInput').addEventListener('input',handleSearch);
+            const searchInput = document.getElementById('searchInput');
+            searchInput.addEventListener('input',handleSearch);
+            searchInput.addEventListener('focus', () => showSuggestions(''));
+            searchInput.addEventListener('blur', () => setTimeout(() => hideSuggestions(), 200));
+        }
+
+        function showSuggestions(query) {
+            const suggestionsDiv = document.getElementById('searchSuggestions');
+            if (!query) {
+                // Show popular searches
+                const popular = ['P0420', 'misfire', 'O2 sensor', 'Honda', 'Ford', 'vacuum leak', 'coil pack'];
+                suggestionsDiv.innerHTML = popular.map(term => `
+                    <div class="suggestion-item" onclick="quickSearch('${term}')">
+                        <span class="suggestion-code">🔍</span>
+                        <span class="suggestion-text">${term}</span>
+                    </div>
+                `).join('');
+                suggestionsDiv.classList.add('active');
+                return;
+            }
+        }
+
+        function hideSuggestions() {
+            document.getElementById('searchSuggestions').classList.remove('active');
+        }
+
+        function quickSearch(term) {
+            document.getElementById('searchInput').value = term;
+            handleSearch({target: {value: term}});
+            hideSuggestions();
+        }
+
+        function handleSearch(e){
+            const query=e.target.value.toLowerCase().trim();
+            const suggestionsDiv = document.getElementById('searchSuggestions');
+            
+            if(!query){
+                clearFilter();
+                showSuggestions('');
+                return;
+            }
+
+            // Show live suggestions
+            const matches = searchIndex.filter(s => 
+                s.searchText.includes(query) || 
+                fuzzyMatch(query, s.searchText)
+            ).slice(0, 5);
+            
+            if (matches.length > 0 && query.length > 1) {
+                suggestionsDiv.innerHTML = matches.map(story => `
+                    <div class="suggestion-item" onclick="showDetail(${story.id}); hideSuggestions();">
+                        <span class="suggestion-code">${story.code}</span>
+                        <span class="suggestion-text">${story.title}</span>
+                    </div>
+                `).join('');
+                suggestionsDiv.classList.add('active');
+            } else {
+                suggestionsDiv.classList.remove('active');
+            }
+            
+            // Perform actual search
+            performSearch(query);
+        }
+
+        function fuzzyMatch(query, text) {
+            // Simple fuzzy matching for partial words
+            const queryParts = query.split(' ');
+            return queryParts.every(part => text.includes(part));
+        }
+
+        function performSearch(query) {
+            const filtered = searchIndex.filter(story => {
+                // Check all searchable fields
+                const text = story.searchText;
+                
+                // Exact match
+                if (text.includes(query)) return true;
+                
+                // Word boundary matches (e.g., "coil" matches "coil pack")
+                const words = query.split(/\s+/);
+                return words.every(word => {
+                    // Check if word appears as substring or similar
+                    return text.includes(word) ||
+                           text.includes(word + 's') ||
+                           text.includes(word.replace(/s$/, '')) ||
+                           text.includes(word + 'ing') ||
+                           text.includes(word.replace(/ing$/, ''));
+                });
+            }).map(s => ({...s, searchText: undefined})); // Remove searchText from results
+
+            renderStories(filtered,'storyGrid');
+            
+            const resultsInfo = document.getElementById('searchResultsInfo');
+            if (query) {
+                resultsInfo.style.display = 'block';
+                resultsInfo.innerHTML = `
+                    <strong>${filtered.length} results</strong> for "${query}" • 
+                    <a href="#" onclick="clearFilter(); return false;" style="color:var(--orange)">Clear search</a>
+                `;
+                document.getElementById('gridTitle').textContent = `Search Results`;
+                document.getElementById('gridSubtitle').textContent = `Found ${filtered.length} fixes matching your query`;
+            } else {
+                resultsInfo.style.display = 'none';
+                document.getElementById('gridTitle').textContent = 'Latest Battle-Tested Fixes';
+                document.getElementById('gridSubtitle').textContent = 'Stories from the garage, not the dealership';
+            }
+
+            if(filtered.length === 0 && query){
+                document.getElementById('noResults').style.display = 'block';
+                document.getElementById('noResults').innerHTML = `
+                    <h3>No fixes found for "${query}"</h3>
+                    <p>Try searching for: <strong>P0420</strong>, <strong>misfire</strong>, <strong>sensor</strong>, <strong>leak</strong>, <strong>Honda</strong>, <strong>coil</strong>, or <strong>valve</strong></p>
+                    <div style="margin-top:1.5rem;display:flex;gap:0.5rem;justify-content:center;flex-wrap:wrap">
+                        <span class="search-tag" onclick="quickSearch('P0420')">Try P0420</span>
+                        <span class="search-tag" onclick="quickSearch('misfire')">Try misfire</span>
+                        <span class="search-tag" onclick="quickSearch('sensor')">Try sensor</span>
+                        <span class="search-tag" onclick="quickSearch('leak')">Try leak</span>
+                    </div>
+                    <button class="btn" onclick="clearFilter()" style="margin-top:1.5rem">Show All Fixes</button>
+                `;
+            } else {
+                document.getElementById('noResults').style.display = 'none';
+            }
+            
+            // Scroll to results
+            if (query) {
+                document.getElementById('mainContent').scrollIntoView({behavior:'smooth'});
+            }
         }
 
         function renderStories(storyList,gridId){
@@ -2375,12 +2618,9 @@
             if(!grid)return;
             
             if(storyList.length===0){
-                document.getElementById('noResults').style.display='block';
                 grid.innerHTML='';
                 return;
             }
-            
-            document.getElementById('noResults').style.display='none';
             
             grid.innerHTML=storyList.map(story=>`
                 <div class="story-card" onclick="showDetail(${story.id})">
@@ -2428,6 +2668,7 @@
             
             document.getElementById('gridTitle').textContent=catNames[cat]||'Filtered Results';
             document.getElementById('gridSubtitle').textContent=`${filtered.length} battle-tested fixes`;
+            document.getElementById('searchResultsInfo').style.display = 'none';
             
             document.getElementById('mainContent').scrollIntoView({behavior:'smooth'});
         }
@@ -2438,25 +2679,9 @@
             document.getElementById('gridTitle').textContent='Latest Battle-Tested Fixes';
             document.getElementById('gridSubtitle').textContent='Stories from the garage, not the dealership';
             document.getElementById('searchInput').value='';
-        }
-
-        function handleSearch(e){
-            const query=e.target.value.toLowerCase();
-            if(!query){
-                clearFilter();
-                return;
-            }
-            
-            const filtered=stories.filter(s=>
-                s.code.toLowerCase().includes(query)||
-                s.title.toLowerCase().includes(query)||
-                s.vehicle.toLowerCase().includes(query)||
-                s.problem.toLowerCase().includes(query)
-            );
-            
-            renderStories(filtered,'storyGrid');
-            document.getElementById('gridTitle').textContent=query?`Results for "${query}"`:'Latest Battle-Tested Fixes';
-            document.getElementById('gridSubtitle').textContent=`${filtered.length} fixes found`;
+            document.getElementById('searchResultsInfo').style.display = 'none';
+            document.getElementById('noResults').style.display = 'none';
+            hideSuggestions();
         }
 
         function showDetail(id){
@@ -2548,6 +2773,9 @@
         window.onclick=function(e){
             if(e.target===document.getElementById('submitModal')){
                 closeModal();
+            }
+            if (!e.target.closest('.search-container')) {
+                hideSuggestions();
             }
         }
 
