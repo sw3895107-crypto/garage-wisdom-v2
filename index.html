@@ -2,1416 +2,699 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Garage Wisdom - Real Fixes, Real Savings</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Garage Wisdom - 50+ Real Fixes, Real Savings</title>
+    <meta name="description" content="Real mechanic fixes for check engine lights. No $1200 dealer quotes, just what actually worked. 50+ verified repairs with step-by-step guides.">
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Roboto+Condensed:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        *{margin:0;padding:0;box-sizing:border-box}
+        :root{
+            --orange:#ff4500;
+            --orange-dark:#cc3700;
+            --steel:#2a2d35;
+            --dark:#1a1c21;
+            --darker:#121418;
+            --text:#e8eaed;
+            --text-dim:#9aa0a6;
+            --accent:#ffd700;
+            --success:#00c851;
+            --cashapp:#00d632;
         }
         
-        :root {
-            --bg-dark: #0a0a0a;
-            --bg-card: #141414;
-            --text-primary: #ffffff;
-            --text-secondary: #888888;
-            --accent-orange: #ff6b35;
-            --accent-blue: #4a90d9;
-            --border: #2a2a2a;
+        body{
+            font-family:'Roboto Condensed',sans-serif;
+            background:var(--darker);
+            color:var(--text);
+            line-height:1.6;
+            overflow-x:hidden;
         }
         
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: var(--bg-dark);
-            color: var(--text-primary);
-            line-height: 1.6;
+        h1,h2,h3,h4{font-family:'Oswald',sans-serif;text-transform:uppercase;letter-spacing:0.02em}
+        
+        .hero{
+            position:relative;
+            height:70vh;
+            min-height:500px;
+            background:linear-gradient(180deg,rgba(18,20,24,0.3) 0%,rgba(18,20,24,0.9) 100%),
+                       url('https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=1920&q=80') center/cover;
+            display:flex;
+            flex-direction:column;
+            justify-content:center;
+            align-items:center;
+            text-align:center;
+            padding:2rem;
+            border-bottom:4px solid var(--orange);
         }
         
-        /* Hero Section */
-        .hero {
-            text-align: center;
-            padding: 4rem 1rem;
-            background: linear-gradient(180deg, rgba(255,107,53,0.1) 0%, transparent 100%);
+        .hero::before{
+            content:'';
+            position:absolute;
+            top:0;left:0;right:0;bottom:0;
+            background:url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="1" fill="rgba(255,69,0,0.1)"/></svg>') repeat;
+            background-size:50px 50px;
+            pointer-events:none;
         }
         
-        .hero h1 {
-            font-size: 2.5rem;
-            margin-bottom: 0.5rem;
-            background: linear-gradient(135deg, var(--accent-orange), #ff8c5a);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+        .hero-content{position:relative;z-index:2;max-width:800px}
+        
+        .hero-badge{
+            display:inline-flex;
+            align-items:center;
+            gap:0.5rem;
+            background:rgba(255,69,0,0.2);
+            border:1px solid var(--orange);
+            padding:0.5rem 1rem;
+            border-radius:4px;
+            font-size:0.85rem;
+            font-weight:700;
+            text-transform:uppercase;
+            margin-bottom:1.5rem;
+            color:var(--orange);
         }
         
-        .hero-stats {
-            display: flex;
-            justify-content: center;
-            gap: 3rem;
-            margin-top: 2rem;
-            flex-wrap: wrap;
+        .hero h1{
+            font-size:clamp(2.5rem,8vw,5rem);
+            font-weight:700;
+            line-height:1;
+            margin-bottom:1rem;
+            text-shadow:0 4px 20px rgba(0,0,0,0.8);
+            background:linear-gradient(135deg,#fff 0%,var(--text-dim) 100%);
+            -webkit-background-clip:text;
+            -webkit-text-fill-color:transparent;
         }
         
-        .stat {
-            text-align: center;
+        .hero h1 span{color:var(--orange);-webkit-text-fill-color:var(--orange)}
+        
+        .hero p{
+            font-size:1.3rem;
+            color:var(--text-dim);
+            max-width:600px;
+            margin:0 auto 2rem;
+            text-transform:uppercase;
+            letter-spacing:0.05em;
         }
         
-        .stat-number {
-            font-size: 2.5rem;
-            font-weight: bold;
-            color: var(--accent-orange);
-            line-height: 1;
+        .search-container{
+            width:100%;
+            max-width:600px;
+            position:relative;
         }
         
-        .stat-label {
-            font-size: 0.85rem;
-            color: var(--text-secondary);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-top: 0.5rem;
+        .search-box{
+            width:100%;
+            position:relative;
         }
         
-        /* Browse by Code Section */
-        .browse-section {
-            padding: 3rem 1rem;
-            max-width: 1200px;
-            margin: 0 auto;
+        .search-box input{
+            width:100%;
+            padding:1.25rem 1.5rem 1.25rem 3.5rem;
+            font-size:1.1rem;
+            border:2px solid rgba(255,255,255,0.1);
+            border-radius:8px;
+            background:rgba(0,0,0,0.6);
+            color:var(--text);
+            font-family:'Roboto Condensed',sans-serif;
+            backdrop-filter:blur(10px);
         }
         
-        .section-title {
-            text-align: center;
-            font-size: 1.5rem;
-            margin-bottom: 0.5rem;
+        .search-box::before{
+            content:'🔍';
+            position:absolute;
+            left:1rem;
+            top:50%;
+            transform:translateY(-50%);
+            font-size:1.2rem;
+            opacity:0.5;
         }
         
-        .section-subtitle {
-            text-align: center;
-            color: var(--text-secondary);
-            margin-bottom: 2rem;
+        .search-box input:focus{
+            outline:none;
+            border-color:var(--orange);
+            box-shadow:0 0 20px rgba(255,69,0,0.3);
         }
         
-        .code-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 1.5rem;
+        .search-suggestions{
+            position:absolute;
+            top:100%;
+            left:0;
+            right:0;
+            background:var(--dark);
+            border:1px solid rgba(255,255,255,0.1);
+            border-top:none;
+            border-radius:0 0 8px 8px;
+            max-height:300px;
+            overflow-y:auto;
+            display:none;
+            z-index:100;
         }
         
-        .code-card {
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            overflow: hidden;
-            transition: transform 0.2s, border-color 0.2s;
-            cursor: pointer;
+        .search-suggestions.active{display:block}
+        
+        .suggestion-item{
+            padding:0.75rem 1rem;
+            cursor:pointer;
+            border-bottom:1px solid rgba(255,255,255,0.05);
+            display:flex;
+            align-items:center;
+            gap:0.75rem;
         }
         
-        .code-card:hover {
-            transform: translateY(-4px);
-            border-color: var(--accent-orange);
+        .suggestion-item:hover{
+            background:rgba(255,69,0,0.1);
         }
         
-        .code-card img {
-            width: 100%;
-            height: 180px;
-            object-fit: cover;
+        .suggestion-code{
+            background:var(--orange);
+            color:#fff;
+            padding:0.25rem 0.5rem;
+            border-radius:4px;
+            font-size:0.75rem;
+            font-weight:700;
         }
         
-        .code-card-content {
-            padding: 1.5rem;
+        .suggestion-text{
+            font-size:0.9rem;
         }
         
-        .code-badge {
-            display: inline-block;
-            background: var(--accent-orange);
-            color: white;
-            padding: 0.25rem 0.75rem;
-            border-radius: 4px;
-            font-weight: bold;
-            font-size: 0.9rem;
-            margin-bottom: 0.5rem;
+        .search-tags{
+            display:flex;
+            gap:0.5rem;
+            margin-top:1rem;
+            flex-wrap:wrap;
+            justify-content:center;
         }
         
-        .code-card h3 {
-            font-size: 1.1rem;
-            color: var(--text-secondary);
+        .search-tag{
+            background:rgba(255,69,0,0.2);
+            border:1px solid var(--orange);
+            color:var(--orange);
+            padding:0.5rem 1rem;
+            border-radius:20px;
+            font-size:0.85rem;
+            cursor:pointer;
+            transition:all 0.3s;
         }
         
-        /* Stories Section */
-        .stories-section {
-            padding: 3rem 1rem;
-            max-width: 1000px;
-            margin: 0 auto;
+        .search-tag:hover{
+            background:var(--orange);
+            color:#fff;
         }
         
-        .story-card {
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 2rem;
-            margin-bottom: 1.5rem;
-            transition: border-color 0.2s;
+        .nav{
+            position:fixed;
+            top:0;left:0;right:0;
+            background:linear-gradient(180deg,rgba(18,20,24,0.95) 0%,transparent 100%);
+            padding:1rem 2rem;
+            z-index:1000;
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
         }
         
-        .story-card:hover {
-            border-color: var(--accent-blue);
+        .logo{
+            font-family:'Oswald',sans-serif;
+            font-size:1.5rem;
+            font-weight:700;
+            display:flex;
+            align-items:center;
+            gap:0.75rem;
+            text-transform:uppercase;
+            cursor:pointer;
         }
         
-        .story-header {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            margin-bottom: 1rem;
-            flex-wrap: wrap;
+        .logo-icon{
+            width:40px;
+            height:40px;
+            background:var(--orange);
+            border-radius:4px;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            font-size:1.5rem;
+            transform:skewX(-10deg);
         }
         
-        .story-number {
-            background: var(--accent-blue);
-            color: white;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            flex-shrink: 0;
+        .nav-links{
+            display:flex;
+            gap:2rem;
+            list-style:none;
         }
         
-        .story-meta {
-            flex: 1;
+        .nav-links a{
+            color:var(--text);
+            text-decoration:none;
+            font-weight:700;
+            text-transform:uppercase;
+            font-size:0.9rem;
+            letter-spacing:0.05em;
+            opacity:0.8;
+            transition:all 0.3s;
+            position:relative;
+            cursor:pointer;
         }
         
-        .story-code {
-            font-size: 1.25rem;
-            font-weight: bold;
-            color: var(--accent-orange);
+        .nav-links a:hover{opacity:1;color:var(--orange)}
+        
+        .nav-links a::after{
+            content:'';
+            position:absolute;
+            bottom:-5px;left:0;
+            width:0;height:2px;
+            background:var(--orange);
+            transition:width 0.3s;
         }
         
-        .story-vehicle {
-            color: var(--text-secondary);
-            font-size: 0.9rem;
+        .nav-links a:hover::after{width:100%}
+        
+        .stats{
+            display:grid;
+            grid-template-columns:repeat(4,1fr);
+            background:var(--dark);
+            border-bottom:1px solid rgba(255,255,255,0.05);
         }
         
-        .story-savings {
-            background: rgba(255,107,53,0.1);
-            border: 1px solid var(--accent-orange);
-            color: var(--accent-orange);
-            padding: 0.5rem 1rem;
-            border-radius: 20px;
-            font-weight: bold;
-            font-size: 0.9rem;
+        .stat{
+            padding:2rem 1rem;
+            text-align:center;
+            border-right:1px solid rgba(255,255,255,0.05);
         }
         
-        .story-content h4 {
-            color: var(--text-primary);
-            margin-bottom: 0.5rem;
-            font-size: 1.1rem;
+        .stat:last-child{border-right:none}
+        
+        .stat-number{
+            font-family:'Oswald',sans-serif;
+            font-size:2.5rem;
+            font-weight:700;
+            color:var(--orange);
+            line-height:1;
         }
         
-        .story-content p {
-            color: var(--text-secondary);
-            line-height: 1.7;
-            margin-bottom: 1rem;
+        .stat-label{
+            font-size:0.85rem;
+            color:var(--text-dim);
+            text-transform:uppercase;
+            letter-spacing:0.1em;
+            margin-top:0.5rem;
         }
         
-        .story-fix {
-            background: rgba(74,144,217,0.1);
-            border-left: 3px solid var(--accent-blue);
-            padding: 1rem;
-            border-radius: 0 8px 8px 0;
+        .categories{
+            padding:3rem 2rem;
+            background:var(--steel);
         }
         
-        .story-fix strong {
-            color: var(--accent-blue);
+        .section-header{
+            text-align:center;
+            margin-bottom:2rem;
         }
         
-        /* CTA Sections */
-        .cta-section {
-            text-align: center;
-            padding: 4rem 1rem;
-            background: var(--bg-card);
-            margin: 3rem 0;
+        .section-header h2{
+            font-size:2rem;
+            margin-bottom:0.5rem;
         }
         
-        .cta-section h2 {
-            font-size: 2rem;
-            margin-bottom: 1rem;
+        .section-header p{color:var(--text-dim)}
+        
+        .cat-grid{
+            display:grid;
+            grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+            gap:1.5rem;
+            max-width:1200px;
+            margin:0 auto;
         }
         
-        .cta-section p {
-            color: var(--text-secondary);
-            max-width: 600px;
-            margin: 0 auto 2rem;
+        .cat-card{
+            position:relative;
+            height:200px;
+            border-radius:8px;
+            overflow:hidden;
+            cursor:pointer;
+            transition:transform 0.3s;
+            border:2px solid transparent;
         }
         
-        /* Popular Section */
-        .popular-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 1.5rem;
-            max-width: 1200px;
-            margin: 2rem auto;
-            padding: 0 1rem;
+        .cat-card:hover{
+            transform:translateY(-5px);
+            border-color:var(--orange);
         }
         
-        .popular-card {
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 1.5rem;
-            position: relative;
+        .cat-card img{
+            width:100%;
+            height:100%;
+            object-fit:cover;
+            filter:brightness(0.6);
+            transition:filter 0.3s;
         }
         
-        .popular-badge {
-            position: absolute;
-            top: -10px;
-            right: 20px;
-            background: var(--accent-orange);
-            color: white;
-            padding: 0.25rem 0.75rem;
-            border-radius: 12px;
-            font-size: 0.75rem;
-            font-weight: bold;
+        .cat-card:hover img{filter:brightness(0.8)}
+        
+        .cat-overlay{
+            position:absolute;
+            bottom:0;left:0;right:0;
+            padding:1.5rem;
+            background:linear-gradient(transparent,rgba(0,0,0,0.9));
         }
         
-        /* Donation Section */
-        .donate-section {
-            text-align: center;
-            padding: 4rem 1rem;
-            background: linear-gradient(180deg, transparent 0%, rgba(255,107,53,0.05) 100%);
+        .cat-code{
+            font-family:'Oswald',sans-serif;
+            font-size:1.5rem;
+            color:var(--orange);
+            font-weight:700;
         }
         
-        .donate-section h2 {
-            font-size: 1.75rem;
-            margin-bottom: 1rem;
+        .cat-name{
+            font-size:0.9rem;
+            color:var(--text-dim);
+            text-transform:uppercase;
+            letter-spacing:0.05em;
         }
         
-        .cash-app {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            background: #00d632;
-            color: white;
-            padding: 1rem 2rem;
-            border-radius: 25px;
-            text-decoration: none;
-            font-weight: bold;
-            margin-top: 1rem;
+        .featured{
+            padding:3rem 2rem;
+            background:var(--darker);
         }
         
-        /* Footer */
-        .footer {
-            text-align: center;
-            padding: 3rem 1rem;
-            border-top: 1px solid var(--border);
-            color: var(--text-secondary);
+        .story-grid{
+            display:grid;
+            grid-template-columns:repeat(auto-fill,minmax(350px,1fr));
+            gap:1.5rem;
+            max-width:1400px;
+            margin:0 auto;
         }
         
-        .footer h3 {
-            color: var(--text-primary);
-            margin-bottom: 0.5rem;
+        .story-card{
+            background:var(--dark);
+            border-radius:8px;
+            overflow:hidden;
+            border:1px solid rgba(255,255,255,0.05);
+            transition:all 0.3s;
+            cursor:pointer;
         }
         
-        @media (max-width: 768px) {
-            .hero h1 {
-                font-size: 1.75rem;
-            }
-            
-            .hero-stats {
-                gap: 2rem;
-            }
-            
-            .stat-number {
-                font-size: 2rem;
-            }
-            
-            .story-header {
-                flex-direction: column;
-                align-items: flex-start;
-            }
+        .story-card:hover{
+            transform:translateY(-5px);
+            border-color:var(--orange);
+            box-shadow:0 20px 40px rgba(0,0,0,0.4);
         }
-    </style>
-</head>
-<body>
-
-    <!-- Hero -->
-    <section class="hero">
-        <h1>50+ Real Fixes, Real Savings</h1>
-        <div class="hero-stats">
-            <div class="stat">
-                <div class="stat-number">$100K+</div>
-                <div class="stat-label">Dealer Costs Avoided</div>
-            </div>
-            <div class="stat">
-                <div class="stat-number">50</div>
-                <div class="stat-label">Battle-Tested Stories</div>
-            </div>
-            <div class="stat">
-                <div class="stat-number">0</div>
-                <div class="stat-label">Warranty Voids</div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Browse by Code -->
-    <section class="browse-section">
-        <h2 class="section-title">Browse by Code</h2>
-        <p class="section-subtitle">Click a category to see fixes that actually worked</p>
         
-        <div class="code-grid">
-            <div class="code-card">
-                <img src="https://images.unsplash.com/photo-1544636331-e26879cd4d9b?w=400&h=300&fit=crop" alt="Catalytic Converter">
-                <div class="code-card-content">
-                    <span class="code-badge">P0420</span>
-                    <h3>Catalytic Converter</h3>
-                </div>
-            </div>
-            <div class="code-card">
-                <img src="https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=400&h=300&fit=crop" alt="Oxygen Sensor">
-                <div class="code-card-content">
-                    <span class="code-badge">P0135</span>
-                    <h3>Oxygen Sensor</h3>
-                </div>
-            </div>
-            <div class="code-card">
-                <img src="https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=400&h=300&fit=crop" alt="Engine Misfire">
-                <div class="code-card-content">
-                    <span class="code-badge">P0300</span>
-                    <h3>Engine Misfire</h3>
-                </div>
-            </div>
-            <div class="code-card">
-                <img src="https://images.unsplash.com/photo-1486262715619-67b85e0b08d3?w=400&h=300&fit=crop" alt="EVAP System">
-                <div class="code-card-content">
-                    <span class="code-badge">P0455</span>
-                    <h3>EVAP System</h3>
-                </div>
-            </div>
-            <div class="code-card">
-                <img src="https://images.unsplash.com/photo-1625047509168-a7026f36de04?w=400&h=300&fit=crop" alt="Mass Air Flow">
-                <div class="code-card-content">
-                    <span class="code-badge">P0101</span>
-                    <h3>Mass Air Flow</h3>
-                </div>
-            </div>
-            <div class="code-card">
-                <img src="https://images.unsplash.com/photo-1487754180451-c456f719a1fc?w=400&h=300&fit=crop" alt="Ignition System">
-                <div class="code-card-content">
-                    <span class="code-badge">P0351</span>
-                    <h3>Ignition System</h3>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- All 50 Stories -->
-    <section class="stories-section">
-        <h2 class="section-title">Latest Battle-Tested Fixes</h2>
-        <p class="section-subtitle">Stories from the garage, not the dealership</p>
-
-        <!-- Story 1 -->
-        <article class="story-card">
-            <div class="story-header">
-                <div class="story-number">1</div>
-                <div class="story-meta">
-                    <div class="story-code">P0420</div>
-                    <div class="story-vehicle">2012 Honda Accord • 142K miles</div>
-                </div>
-                <div class="story-savings">Saved $1,200</div>
-            </div>
-            <div class="story-content">
-                <h4>The "Catalytic Converter" Scam</h4>
-                <p>Dealer said I needed a new cat for $1,400. Threw a P0420 code and they insisted it was failed. Smelled like rotten eggs and power was down. Almost paid it until my buddy suggested checking the downstream O2 sensor first.</p>
-                <div class="story-fix">
-                    <strong>The Fix:</strong> Replaced the downstream O2 sensor ($89 part, 20 minutes with a socket). Cleared the code, drove 200 miles, no return. The sensor was lazy and throwing false readings. Cat was fine all along.
-                </div>
-            </div>
-        </article>
-
-        <!-- Story 2 -->
-        <article class="story-card">
-            <div class="story-header">
-                <div class="story-number">2</div>
-                <div class="story-meta">
-                    <div class="story-code">P0302</div>
-                    <div class="story-vehicle">2008 Ford F-150 • 98K miles</div>
-                </div>
-                <div class="story-savings">Saved $800</div>
-            </div>
-            <div class="story-content">
-                <h4>Shaking Like a Washing Machine</h4>
-                <p>Cylinder 2 misfire on my 5.4L Triton. Shop wanted to replace all 8 coils and plugs for $950. Truck was shaking at idle and throwing P0302 consistently. Compression test showed good numbers, so it wasn't mechanical.</p>
-                <div class="story-fix">
-                    <strong>The Fix:</strong> Swapped coil #2 with coil #4. Code moved to P0304. Ordered one Motorcraft coil ($65) and replaced the bad one. Also found the COP boot was oil-soaked from a leaking valve cover gasket. Fixed that too with a $12 gasket. Total: $77.
-                </div>
-            </div>
-        </article>
-
-        <!-- Story 3 -->
-        <article class="story-card">
-            <div class="story-header">
-                <div class="story-number">3</div>
-                <div class="story-meta">
-                    <div class="story-code">P0135</div>
-                    <div class="story-vehicle">2005 Toyota Camry • 167K miles</div>
-                </div>
-                <div class="story-savings">Saved $340</div>
-            </div>
-            <div class="story-content">
-                <h4>Heater Circuit Drama</h4>
-                <p>Upstream O2 sensor heater circuit code. Shop quoted $450 to "diagnose and replace O2 sensor, possible wiring repair." Car ran fine but wouldn't pass inspection with the CEL on. Code kept coming back immediately after clearing.</p>
-                <div class="story-fix">
-                    <strong>The Fix:</strong> Checked the O2 sensor fuse first - blown 15A fuse in the engine bay box. Replaced it ($3), code cleared. Fuse blew again a week later. Traced wiring and found the O2 sensor harness was rubbing against the exhaust heat shield. Wrapped with heat tape, secured with zip ties. Fixed for good.
-                </div>
-            </div>
-        </article>
-
-        <!-- Story 4 -->
-        <article class="story-card">
-            <div class="story-header">
-                <div class="story-number">4</div>
-                <div class="story-meta">
-                    <div class="story-code">P0455</div>
-                    <div class="story-vehicle">2015 Jeep Wrangler • 45K miles</div>
-                </div>
-                <div class="story-savings">Saved $600</div>
-            </div>
-            <div class="story-content">
-                <h4>Gas Cap Roulette</h4>
-                <p>Large EVAP leak detected. Dealer wanted to smoke test the system ($180) then replace the charcoal canister ($420). Smelled fuel occasionally near the rear of the Jeep. Code came and went randomly, especially after fill-ups.</p>
-                <div class="story-fix">
-                    <strong>The Fix:</strong> Started with the gas cap - replaced with OEM Mopar cap ($35). Code returned. Checked the EVAP lines near the canister and found the service port cap was missing! Previous mechanic left it off during a fuel pump recall. New cap ($8) and no more codes. Also found a cracked hose clamp.
-                </div>
-            </div>
-        </article>
-
-        <!-- Story 5 -->
-        <article class="story-card">
-            <div class="story-header">
-                <div class="story-number">5</div>
-                <div class="story-meta">
-                    <div class="story-code">P0101</div>
-                    <div class="story-vehicle">2010 Chevy Silverado • 112K miles</div>
-                </div>
-                <div class="story-savings">Saved $500</div>
-            </div>
-            <div class="story-content">
-                <h4>Black Death MAF</h4>
-                <p>Mass Air Flow sensor out of range. Truck was running rich, black smoke on acceleration, terrible MPG. Shop said "replace MAF sensor, $380 installed." Had that gut feeling it was simpler.</p>
-                <div class="story-fix">
-                    <strong>The Fix:</strong> Removed the MAF sensor and it was coated in black oil residue from a K&N filter that was over-oiled. Cleaned it carefully with MAF cleaner spray ($12), let it dry completely. Also found the air filter box wasn't sealing properly - replaced the lid clips ($15). Runs like new, MPG back to 18.
-                </div>
-            </div>
-        </article>
-
-        <!-- Story 6 -->
-        <article class="story-card">
-            <div class="story-header">
-                <div class="story-number">6</div>
-                <div class="story-meta">
-                    <div class="story-code">P0171</div>
-                    <div class="story-vehicle">2009 Subaru Outback • 134K miles</div>
-                </div>
-                <div class="story-savings">Saved $1,100</div>
-            </div>
-            <div class="story-content">
-                <h4>The Lean Condition Hunt</h4>
-                <p>System too lean Bank 1. Subaru specialist wanted to replace the front O2 sensor ($280), then the fuel pump ($600), then "possibly injectors." Car was hesitating on cold starts and idling rough when warm.</p>
-                <div class="story-fix">
-                    <strong>The Fix:</strong> Checked fuel trims with scanner - maxed positive at idle, normalized at 2500 RPM. Classic vacuum leak. Sprayed carb cleaner around intake manifold and found a massive leak at the PCV hose elbow. The rubber was rock hard and cracked. Replaced the PCV valve and hose ($28). Fuel trims back to normal, runs smooth.
-                </div>
-            </div>
-        </article>
-
-        <!-- Story 7 -->
-        <article class="story-card">
-            <div class="story-header">
-                <div class="story-number">7</div>
-                <div class="story-meta">
-                    <div class="story-code">P0442</div>
-                    <div class="story-vehicle">2011 Nissan Altima • 89K miles</div>
-                </div>
-                <div class="story-savings">Saved $420</div>
-            </div>
-            <div class="story-content">
-                <h4>Small Leak, Big Headache</h4>
-                <p>Small EVAP leak detected. Shop smoke tested and said "could be canister vent valve, canister, or lines - recommend replacing canister assembly." Quote was $520. No smell of gas, just the annoying CEL.</p>
-                <div class="story-fix">
-                    <strong>The Fix:</strong> Listened to the canister vent valve while key was on - no click. Removed it and tested with 12V - stuck closed. But instead of buying the whole assembly, found the valve is available separately from RockAuto ($45). While under there, found the vent hose had a tiny crack near the frame. Replaced hose section with fuel line ($8). Total $53.
-                </div>
-            </div>
-        </article>
-
-        <!-- Story 8 -->
-        <article class="story-card">
-            <div class="story-header">
-                <div class="story-number">8</div>
-                <div class="story-meta">
-                    <div class="story-code">P0351</div>
-                    <div class="story-vehicle">2007 Dodge Ram 1500 • 156K miles</div>
-                </div>
-                <div class="story-savings">Saved $950</div>
-            </div>
-            <div class="story-content">
-                <h4>The Hemi Tick of Death</h4>
-                <p>Ignition coil A primary/secondary circuit. Dealer heard the "Hemi tick" and immediately quoted $2,400 for lifter replacement, cam, and "while we're in there" gaskets. Truck was missing on cylinder 1 and ticking loudly on cold start.</p>
-                <div class="story-fix">
-                    <strong>The Fix:</strong> Checked the coil first with a spark tester - weak spark. Replaced coil #1 ($68) and the tick disappeared. The misfire was causing unburnt fuel to wash down the cylinder wall, causing temporary lifter noise. Also replaced all 16 spark plugs since they were original. Total $140. Ticking hasn't returned in 20K miles.
-                </div>
-            </div>
-        </article>
-
-        <!-- Story 9 -->
-        <article class="story-card">
-            <div class="story-header">
-                <div class="story-number">9</div>
-                <div class="story-meta">
-                    <div class="story-code">P0401</div>
-                    <div class="story-vehicle">2004 Honda Civic • 198K miles</div>
-                </div>
-                <div class="story-savings">Saved $680</div>
-            </div>
-            <div class="story-content">
-                <h4>EGR Insufficient Flow</h4>
-                <p>Failed emissions test. Shop wanted to replace the EGR valve ($320) and "clean the passages" ($280). Car was pinging under load and had a rough idle when warm. Classic EGR issues on these D-series engines.</p>
-                <div class="story-fix">
-                    <strong>The Fix:</strong> Removed the EGR valve and the intake manifold passage was completely clogged with carbon - like concrete. Used a coat hanger and carb cleaner to break it up, then vacuumed out the chunks. Cleaned the EGR valve itself with cleaner - pintle was stuck. Reinstalled with new gasket ($12). Passed emissions with flying colors.
-                </div>
-            </div>
-        </article>
-
-        <!-- Story 10 -->
-        <article class="story-card">
-            <div class="story-header">
-                <div class="story-number">10</div>
-                <div class="story-meta">
-                    <div class="story-code">P0325</div>
-                    <div class="story-vehicle">2006 Nissan Maxima • 127K miles</div>
-                </div>
-                <div class="story-savings">Saved $890</div>
-            </div>
-            <div class="story-content">
-                <h4>Knock Sensor Nightmare</h4>
-                <p>Knock sensor circuit malfunction. Nissan dealer said "both knock sensors need replacement, intake manifold must come off, 6-hour job." Quote was $1,100. Car had no power on hills and was retarding timing badly.</p>
-                <div class="story-fix">
-                    <strong>The Fix:</strong> Found a TSB about harness chafing on the VQ35DE. Checked the harness where it routes under the intake - completely rubbed through to bare wire on the bracket. Repaired with solder, heat shrink, and wire loom ($15 in supplies). Also secured the harness better. Code cleared, power restored. Sensors were fine, just bad wiring.
-                </div>
-            </div>
-        </article>
-
-        <!-- Story 11 -->
-        <article class="story-card">
-            <div class="story-header">
-                <div class="story-number">11</div>
-                <div class="story-meta">
-                    <div class="story-code">P0507</div>
-                    <div class="story-vehicle">2013 VW Jetta • 76K miles</div>
-                </div>
-                <div class="story-savings">Saved $450</div>
-            </div>
-            <div class="story-content">
-                <h4>Idle Air Control Issues</h4>
-                <p>Idle control system RPM higher than expected. VW specialist said "replace throttle body, $580." Car was idling at 1200 RPM instead of 800, especially annoying in drive-thrus.</p>
-                <div class="story-fix">
-                    <strong>The Fix:</strong> Removed the throttle body and it was caked with carbon on the butterfly valve and bore. Cleaned thoroughly with throttle body cleaner and a toothbrush. Adapted the throttle with VCDS (borrowed cable). Idle dropped to normal immediately. Also found a cracked vacuum line to the EVAP purge valve - replaced with hose ($6).
-                </div>
-            </div>
-        </article>
-
-        <!-- Story 12 -->
-        <article class="story-card">
-            <div class="story-header">
-                <div class="story-number">12</div>
-                <div class="story-meta">
-                    <div class="story-code">P0011</div>
-                    <div class="story-vehicle">2011 Hyundai Sonata • 89K miles</div>
-                </div>
-                <div class="story-savings">Saved $2,400</div>
-            </div>
-            <div class="story-content">
-                <h4>Timing Chain Tensioner Terror</h4>
-                <p>Intake camshaft position timing over-advanced. Dealer immediately said "timing chain stretched, need full replacement, $2,800." Rattling noise on startup that lasted 2-3 seconds.</p>
-                <div class="story-fix">
-                    <strong>The Fix:</strong> Known issue with these engines - the timing chain tensioner loses prime when sitting. Replaced just the tensioner ($85 OEM) and the rattle disappeared. Chain wear was minimal when checked through oil cap. Also did an oil change with high detergent oil to clean the VVT solenoid screens. Code never returned.
-                </div>
-            </div>
-        </article>
-
-        <!-- Story 13 -->
-        <article class="story-card">
-            <div class="story-header">
-                <div class="story-number">13</div>
-                <div class="story-meta">
-                    <div class="story-code">P0705</div>
-                    <div class="story-vehicle">2008 Toyota 4Runner • 143K miles</div>
-                </div>
-                <div class="story-savings">Saved $1,200</div>
-            </div>
-            <div class="story-content">
-                <h4>Transmission Range Sensor</h4>
-                <p>Transmission range sensor circuit malfunction. Shop said "internal transmission problem, need valve body or rebuild, $3,500+." Reverse lights weren't working and starter was cranky.</p>
-                <div class="story-fix">
-                    <strong>The Fix:</strong> The neutral safety switch (same as range sensor) on these is external on the transmission. Removed it and found the connector was full of transmission fluid - seal was leaking. Replaced the switch ($95) and fixed the leaking seal with RTV since the new switch came with one. Adjusted properly and all issues resolved.
-                </div>
-            </div>
-        </article>
-
-        <!-- Story 14 -->
-        <article class="story-card">
-            <div class="story-header">
-                <div class="story-number">14</div>
-                <div class="story-meta">
-                    <div class="story-code">P0128</div>
-                    <div class="story-vehicle">2010 Ford Escape • 102K miles</div>
-                </div>
-                <div class="story-savings">Saved $380</div>
-            </div>
-            <div class="story-content">
-                <h4>Thermostat Below Regulating Temperature</h4>
-                <p>Engine running too cool, heater not getting hot. Shop wanted to replace thermostat ($180) and "test the coolant temp sensor" ($150). Temperature gauge was reading low and CEL was on.</p>
-                <div class="story-fix">
-                    <strong>The Fix:</strong> Thermostat was indeed stuck open, but these 2.5L engines are easy. Drained coolant, removed upper hose, two bolts, and the thermostat housing. Found the old thermostat was a cheap fail-safe type that failed open. Replaced with OEM Motorcraft thermostat and gasket ($35). Refilled with coolant. Heater works great now.
-                </div>
-            </div>
-        </article>
-
-        <!-- Story 15 -->
-        <article class="story-card">
-            <div class="story-header">
-                <div class="story-number">15</div>
-                <div class="story-meta">
-                    <div class="story-code">P0410</div>
-                    <div class="story-vehicle">2005 Chevrolet Tahoe • 156K miles</div>
-                </div>
-                <div class="story-savings">Saved $900</div>
-            </div>
-            <div class="story-content">
-                <h4>Secondary Air Injection System</h4>
-                <p>SAI system malfunction. Dealer said "pump failed, need new pump and valves, $980." Common on these GMT800 trucks. Pump was running but code kept coming back.</p>
-                <div class="story-fix">
-                    <strong>The Fix:</strong> Checked the check valves first - both were rusted solid and carboned up. Replaced both check valves ($45). Found the intake hose from the pump was cracked and sucking in unfiltered air. Replaced with new hose ($22). Pump was actually fine, just couldn't build pressure due to leaks. Cleared code, passed emissions.
-                </div>
-            </div>
-        </article>
-
-        <!-- Story 16 -->
-        <article class="story-card">
-            <div class="story-header">
-                <div class="story-number">16</div>
-                <div class="story-meta">
-                    <div class="story-code">P0340</div>
-                    <div class="story-vehicle">2003 Dodge Neon • 167K miles</div>
-                </div>
-                <div class="story-savings">Saved $650</div>
-            </div>
-            <div class="story-content">
-                <h4>Camshaft Position Sensor Circuit</h4>
-                <p>Car died while driving and wouldn't restart. Cranked but no spark. Shop said "timing belt jumped, need engine repair assessment." Neon has a timing belt that was due.</p>
-                <div class="story-fix">
-                    <strong>The Fix:</strong> Checked timing marks first - belt was fine and on time. Tested cam sensor with multimeter - open circuit. Replaced cam position sensor ($45). While in there, found the sensor connector was melted from previous exhaust leak heat. Repaired wiring with new pigtail ($25). Started right up. Timing belt was actually fine.
-                </div>
-            </div>
-        </article>
-
-        <!-- Story 17 -->
-        <article class="story-card">
-            <div class="story-header">
-                <div class="story-number">17</div>
-                <div class="story-meta">
-                    <div class="story-code">P0456</div>
-                    <div class="story-vehicle">2016 Subaru Forester • 58K miles</div>
-                </div>
-                <div class="story-savings">Saved $520</div>
-            </div>
-            <div class="story-content">
-                <h4>Very Small EVAP Leak</h4>
-                <p>Small leak detected, smaller than P0455. Subaru dealer smoke tested and said "fuel tank pressure sensor failure, $620." Code came on randomly, usually after cold nights.</p>
-                <div class="story-fix">
-                    <strong>The Fix:</strong> Checked the gas cap - seal was hard and cracked. Replaced with OEM ($45). Code returned. Checked the EVAP lines near the canister and found a mouse had chewed a tiny hole in the plastic line! Repaired with rubber fuel line and clamps ($12). Also found the purge valve was slightly leaking vacuum - replaced ($68). Fixed for good.
-                </div>
-            </div>
-        </article>
-
-        <!-- Story 18 -->
-        <article class="story-card">
-            <div class="story-header">
-                <div class="story-number">18</div>
-                <div class="story-meta">
-                    <div class="story-code">P0113</div>
-                    <div class="story-vehicle">2009 Mazda 3 • 134K miles</div>
-                </div>
-                <div class="story-savings">Saved $340</div>
-            </div>
-            <div class="story-content">
-                <h4>IAT Sensor High Input</h4>
-                <p>Intake Air Temperature sensor circuit high. Shop said "replace MAF/IAT sensor assembly, $380." Car was running rich and hard starting when cold.</p>
-                <div class="story-fix">
-                    <strong>The Fix:</strong> Checked the wiring harness first - found the IAT signal wire was broken inside the insulation near the connector, probably from engine movement. Spliced in a new section of wire with proper connectors ($8). Sensor was reading -40°F when it was 70° out. After repair, reading was accurate and fuel trim normalized.
-                </div>
-            </div>
-        </article>
-
-        <!-- Story 19 -->
-        <article class="story-card">
-            <div class="story-header">
-                <div class="story-number">19</div>
-                <div class="story-meta">
-                    <div class="story-code">P0740</div>
-                    <div class="story-vehicle">2007 Honda Odyssey • 142K miles</div>
-                </div>
-                <div class="story-savings">Saved $3,200</div>
-            </div>
-            <div class="story-content">
-                <h4>Torque Converter Clutch Circuit</h4>
-                <p>TCC solenoid circuit. Transmission shop said "need transmission rebuild, $3,500." Van was shuddering at highway speeds and CEL was on.</p>
-                <div class="story-fix">
-                    <strong>The Fix:</strong> Changed transmission fluid with Honda DW-1 first - shudder improved but didn't go away. Removed the transmission side cover and replaced the TCC solenoid ($95) and linear solenoid gasket set ($35). Also cleaned the screens. Shudder disappeared completely. These Honda transmissions are sensitive to fluid and solenoid issues.
-                </div>
-            </div>
-        </article>
-
-        <!-- Story 20 -->
-        <article class="story-card">
-            <div class="story-header">
-                <div class="story-number">20</div>
-                <div class="story-meta">
-                    <div class="story-code">P2122</div>
-                    <div class="story-vehicle">2012 Ford Focus • 87K miles</div>
-                </div>
-                <div class="story-savings">Saved $890</div>
-            </div>
-            <div class="story-content">
-                <h4>Throttle Position Sensor Low</h4>
-                <p>APP sensor 1 low input. Dealer said "replace throttle body and pedal assembly, $950." Car was in limp mode, barely drivable, wrench light on.</p>
-                <div class="story-fix">
-                    <strong>The Fix:</strong> Checked the accelerator pedal sensor connector - pins were corroded green from water intrusion. Cleaned with electrical contact cleaner and dielectric grease. Code returned. Ordered just the pedal assembly from RockAuto ($145) since the TPS is integrated. Swapped it in 20 minutes. Full power restored, no more limp mode.
-                </div>
-            </div>
-        </article>
-
-        <!-- Story 21 -->
-        <article class="story-card">
-            <div class="story-header">
-                <div class="story-number">21</div>
-                <div class="story-meta">
-                    <div class="story-code">P0496</div>
-                    <div class="story-vehicle">2008 GMC Yukon • 134K miles</div>
-                </div>
-                <div class="story-savings">Saved $480</div>
-            </div>
-            <div class="story-content">
-                <h4>EVAP Flow During Non-Purge</h4>
-                <p>Purge valve stuck open. Shop wanted to replace the entire EVAP canister assembly. Car was hard starting after fill-up and smelled like gas.</p>
-                <div class="story-fix">
-                    <strong>The Fix:</strong> Removed the purge valve solenoid and blew through it - air passed freely when it should be closed. Replaced just the valve ($45 AC Delco). Found the vent hose was also cracked. The canister was fine. Started normally after fill-up immediately.
-                </div>
-            </div>
-        </article>
-
-        <!-- Story 22 -->
-        <article class="story-card">
-            <div class="story-header">
-                <div class="story-number">22</div>
-                <div class="story-meta">
-                    <div class="story-code">P0014</div>
-                    <div class="story-vehicle">2010 BMW 328i • 98K miles</div>
-                </div>
-                <div class="story-savings">Saved $2,800</div>
-            </div>
-            <div class="story-content">
-                <h4>Exhaust Cam Over-Advanced</h4>
-                <p>BMW indie shop said "timing chain guides failed, need full timing job, $3,200." Rattle on startup and rough idle when warm.</p>
-                <div class="story-fix">
-                    <strong>The Fix:</strong> Changed oil with proper LL-01 spec and added Lubegard Bio/Tech Engine Protectant. Removed and cleaned both VANOS solenoids with brake cleaner - they were sludged up. Reinstalled with new o-rings ($25). Rattle gone, code cleared. Chain tension was actually fine.
-                </div>
-            </div>
-        </article>
-
-        <!-- Story 23 -->
-        <article class="story-card">
-            <div class="story-header">
-                <div class="story-number">23</div>
-                <div class="story-meta">
-                    <div class="story-code">P0304</div>
-                    <div class="story-vehicle">2015 VW Golf • 67K miles</div>
-                </div>
-                <div class="story-savings">Saved $1,100</div>
-            </div>
-            <div class="story-content">
-                <h4>Cylinder 4 Misfire TSI</h4>
-                <p>Dealer said "carbon buildup, need intake valve cleaning $800, plus coil $180." Running rough under boost.</p>
-                <div class="story-fix">
-                    <strong>The Fix:</strong> Moved coil 4 to cylinder 1 - code followed. Replaced all coils with R8 reds ($180 set). Then did a proper Italian tune-up and used CRC intake valve cleaner through the intake. Misfire gone. Carbon wasn't bad enough to warrant removal.
-                </div>
-            </div>
-        </article>
-
-        <!-- Story 24 -->
-        <article class="story-card">
-            <div class="story-header">
-                <div class="story-number">24</div>
-                <div class="story-meta">
-                    <div class="story-code">P0521</div>
-                    <div class="story-vehicle">2013 Chevy Cruze • 76K miles</div>
-                </div>
-                <div class="story-savings">Saved $650</div>
-            </div>
-            <div class="story-content">
-                <h4>Oil Pressure Sensor Range</h4>
-                <p>Shop said "oil pump failing, need engine work." Oil pressure gauge was erratic, sometimes zero at idle.</p>
-                <div class="story-fix">
-                    <strong>The Fix:</strong> These have a known issue with the oil pressure switch leaking internally. Replaced the switch ($35) and found the connector was oil-soaked. Cleaned with contact cleaner. Pressure reading normal immediately. These switches fail constantly on 1.4T engines.
-                </div>
-            </div>
-        </article>
-
-        <!-- Story 25 -->
-        <article class="story-card">
-            <div class="story-header">
-                <div class="story-number">25</div>
-                <div class="story-meta">
-                    <div class="story-code">P2096</div>
-                    <div class="story-vehicle">2011 Subaru WRX • 89K miles</div>
-                </div>
-                <div class="story-savings">Saved $1,400</div>
-            </div>
-            <div class="story-content">
-                <h4>Post Catalyst Fuel Trim Too Lean</h4>
-                <p>Shop said "cat failing, need turbo-back exhaust $1,800." Had aftermarket intake and tune.</p>
-                <div class="story-fix">
-                    <strong>The Fix:</strong> Found a massive boost leak at the intercooler hose - clamp was loose. Tightened and added t-bolt clamps ($25). Also found the aftermarket intake had a crack near the MAF. Replaced with OEM ($85). Fuel trims normalized. Cat was fine, just bad readings from unmetered air.
-                </div>
-            </div>
-        </article>
-
-        <!-- Story 26 -->
-        <article class="story-card">
-            <div class="story-header">
-                <div class="story-number">26</div>
-                <div class="story-meta">
-                    <div class="story-code">P2181</div>
-                    <div class="story-vehicle">2006 Audi A4 • 112K miles</div>
-                </div>
-                <div class="story-savings">Saved $890</div>
-            </div>
-            <div class="story-content">
-                <h4>Cooling System Performance</h4>
-                <p>Indie shop said "water pump failing, thermostat, maybe head gasket $2,200." Temp gauge erratic.</p>
-                <div class="story-fix">
-                    <strong>The Fix:</strong> Found the coolant temp sensor connector was corroded. Replaced sensor and pigtail ($65). Then found the auxiliary water pump for the heater was seized. Replaced ($145). System bled properly with vacuum filler. Temps stable now.
-                </div>
-            </div>
-        </article>
-
-        <!-- Story 27 -->
-        <article class="story-card">
-            <div class="story-header">
-                <div class="story-number">27</div>
-                <div class="story-meta">
-                    <div class="story-code">P0441</div>
-                    <div class="story-vehicle">2009 Toyota Corolla • 156K miles</div>
-                </div>
-                <div class="story-savings">Saved $420</div>
-            </div>
-            <div class="story-content">
-                <h4>EVAP Incorrect Purge Flow</h4>
-                <p>Shop said "canister purge valve stuck, need canister too $580."</p>
-                <div class="story-fix">
-                    <strong>The Fix:</strong> Replaced just the purge valve ($45 Denso). Found the vacuum line to the valve was clogged with spider nest! Blew it out with compressed air. Also replaced the gas cap ($15) since seal was cracked. Code cleared, monitor ran and passed.
-                </div>
-            </div>
-        </article>
-
-        <!-- Story 28 -->
-        <article class="story-card">
-            <div class="story-header">
-                <div class="story-number">28</div>
-                <div class="story-meta">
-                    <div class="story-code">P0155</div>
-                    <div class="story-vehicle">2005 Ford F-250 • 178K miles</div>
-                </div>
-                <div class="story-savings">Saved $540</div>
-            </div>
-            <div class="story-content">
-                <h4>O2 Sensor Heater Bank 2 Sensor 1</h4>
-                <p>Diesel shop said "replace both upstream sensors $650." 6.0L Powerstroke.</p>
-                <div class="story-fix">
-                    <strong>The Fix:</strong> Checked fuse first - blown. Replaced ($5). Fuse blew again. Found the sensor harness was rubbing on the transmission bell housing. Repaired wires, added loom and zip ties ($15). Sensor was fine, just shorted wiring.
-                </div>
-            </div>
-        </article>
-
-        <!-- Story 29 -->
-        <article class="story-card">
-            <div class="story-header">
-                <div class="story-number">29</div>
-                <div class="story-meta">
-                    <div class="story-code">P0306</div>
-                    <div class="story-vehicle">2014 Ram 1500 • 87K miles</div>
-                </div>
-                <div class="story-savings">Saved $1,200</div>
-            </div>
-            <div class="story-content">
-                <h4>Cylinder 6 Misfire EcoDiesel</div>
-                <div class="story-fix">
-                    <strong>The Fix:</strong> Dealer said "injector failure, need all 6 $2,400." 
-                </div>
-            </div>
-            <div class="story-content">
-                <p>Swapped injector 6 with cylinder 2 - code moved. Just one bad injector. Replaced with reman ($385) and new hold-down bolt. Also found the fuel filter was original and clogged. Changed filter ($45). Misfire gone.</p>
-            </div>
-        </article>
-
-        <!-- Story 30 -->
-        <article class="story-card">
-            <div class="story-header">
-                <div class="story-number">30</div>
-                <div class="story-meta">
-                    <div class="story-code">P0562</div>
-                    <div class="story-vehicle">2007 Honda Civic • 167K miles</div>
-                </div>
-                <div class="story-savings">Saved $380</div>
-            </div>
-            <div class="story-content">
-                <h4>System Voltage Low</h4>
-                <p>Shop said "alternator failing, $420." Battery light flickering at idle.</p>
-                <div class="story-fix">
-                    <strong>The Fix:</strong> Tested alternator - output was fine at 2000 RPM but low at idle. Cleaned the throttle body and reset idle speed. Voltage normalized. The low idle was causing low alternator output at stops. Also cleaned battery terminals.
-                </div>
-            </div>
-        </article>
-
-        <!-- Story 31 -->
-        <article class="story-card">
-            <div class="story-header">
-                <div class="story-number">31</div>
-                <div class="story-meta">
-                    <div class="story-code">P2432</div>
-                    <div class="story-vehicle">2012 Chevy Sonic • 76K miles</div>
-                </div>
-                <div class="story-savings">Saved $890</div>
-            </div>
-            <div class="story-content">
-                <h4>Secondary Air Injection Valve Low</h4>
-                <p>Dealer said "SAI pump failed, $980." 1.8L engine.</p>
-                <div class="story-fix">
-                    <strong>The Fix:</strong> Checked the combi valve first - seized solid from carbon. Replaced just the valve ($95). Pump was fine. Also found the intake hose was cracked. Replaced with silicone hose ($25). Code cleared, AIR monitor passed.
-                </div>
-            </div>
-        </article>
-
-        <!-- Story 32 -->
-        <article class="story-card">
-            <div class="story-header">
-                <div class="story-number">32</div>
-                <div class="story-meta">
-                    <div class="story-code">P0106</div>
-                    <div class="story-vehicle">2008 Saturn Vue • 134K miles</div>
-                </div>
-                <div class="story-savings">Saved $520</div>
-            </div>
-            <div class="story-content">
-                <h4>MAP Sensor Range</h4>
-                <p>Shop said "replace MAP sensor and check for vacuum leaks $600."</p>
-                <div class="story-fix">
-                    <strong>The Fix:</strong> Found the MAP sensor hose was cracked at the sensor end. Replaced with vacuum hose ($8). Sensor was reading atmospheric pressure instead of manifold. Also found the PCV hose elbow was cracked - replaced ($15). Total $23.
-                </div>
-            </div>
-        </article>
-
-        <!-- Story 33 -->
-        <article class="story-card">
-            <div class="story-header">
-                <div class="story-number">33</div>
-                <div class="story-meta">
-                    <div class="story-code">P0420</div>
-                    <div class="story-vehicle">2006 Nissan Altima • 189K miles</div>
-                </div>
-                <div class="story-savings">Saved $1,800</div>
-            </div>
-            <div class="story-content">
-                <h4>Catalytic Converter Efficiency (Again)</h4>
-                <p>Shop said "both cats failed, need Y-pipe $2,200."</p>
-                <div class="story-fix">
-                    <strong>The Fix:</strong> Checked for exhaust leaks first - found flex pipe was leaking before the cat. Replaced flex section ($180 welded). Leak was causing false O2 readings. Also replaced the downstream O2 since it was original ($85). Code cleared, passed emissions.
-                </div>
-            </div>
-        </article>
-
-        <!-- Story 34 -->
-        <article class="story-card">
-            <div class="story-header">
-                <div class="story-number">34</div>
-                <div class="story-meta">
-                    <div class="story-code">P0500</div>
-                    <div class="story-vehicle">2003 Toyota Tacoma • 198K miles</div>
-                </div>
-                <div class="story-savings">Saved $680</div>
-            </div>
-            <div class="story-content">
-                <h4>Vehicle Speed Sensor</h4>
-                <p>Shop said "transmission speed sensor, need to drop pan $750." Speedo jumping around.</p>
-                <div class="story-fix">
-                    <strong>The Fix:</strong> These have a speed sensor on the rear diff for ABS and speedo. Checked it - full of metal debris. Cleaned the sensor ($0) and found the tone ring was cracked. Replaced with used diff cover with tone ring ($85). Speedo perfect now.
-                </div>
-            </div>
-        </article>
-
-        <!-- Story 35 -->
-        <article class="story-card">
-            <div class="story-header">
-                <div class="story-number">35</div>
-                <div class="story-meta">
-                    <div class="story-code">P0138</div>
-                    <div class="story-vehicle">2010 Hyundai Elantra • 112K miles</div>
-                </div>
-                <div class="story-savings">Saved $340</div>
-            </div>
-            <div class="story-content">
-                <h4>O2 Sensor Circuit High Voltage</h4>
-                <p>Shop said "replace downstream O2, $380."</p>
-                <div class="story-fix">
-                    <strong>The Fix:</strong> Checked the wiring - found the O2 sensor harness was melted against the exhaust manifold. Repaired 4 wires with high-temp wire and heat shrink ($25). Sensor was fine, just shorted wiring giving false high voltage.
-                </div>
-            </div>
-        </article>
-
-        <!-- Story 36 -->
-        <article class="story-card">
-            <div class="story-header">
-                <div class="story-number">36</div>
-                <div class="story-meta">
-                    <div class="story-code">P0440</div>
-                    <div class="story-vehicle">2004 Ford Explorer • 167K miles</div>
-                </div>
-                <div class="story-savings">Saved $580</div>
-            </div>
-            <div class="story-content">
-                <h4>General EVAP System Fault</h4>
-                <p>Shop said "smoke test and replace canister vent valve $680."</p>
-                <div class="story-fix">
-                    <strong>The Fix:</strong> Checked the fuel filler neck - rusted through with holes! Common on these. Replaced filler neck ($95). Also replaced the gas cap ($15). EVAP monitor ran and passed. No smoke test needed.
-                </div>
-            </div>
-        </article>
-
-        <!-- Story 37 -->
-        <article class="story-card">
-            <div class="story-header">
-                <div class="story-number">37</div>
-                <div class="story-meta">
-                    <div class="story-code">P0017</div>
-                    <div class="story-vehicle">2013 Chevy Equinox • 87K miles</div>
-                </div>
-                <div class="story-savings">Saved $2,200</div>
-            </div>
-            <div class="story-content">
-                <h4>Crank-Cam Correlation Bank 1</h4>
-                <p>Shop said "timing chain stretched, need full replacement $2,600."</p>
-                <div class="story-fix">
-                    <strong>The Fix:</strong> Found the cam actuator solenoid screen was clogged with debris. Removed and cleaned both VVT solenoids with brake cleaner ($0). Changed oil with high detergent synthetic. Code cleared and hasn't returned in 15K miles. Chain was fine.
-                </div>
-            </div>
-        </article>
-
-        <!-- Story 38 -->
-        <article class="story-card">
-            <div class="story-header">
-                <div class="story-number">38</div>
-                <div class="story-meta">
-                    <div class="story-code">P0320</div>
-                    <div class="story-vehicle">2001 Jeep Cherokee • 234K miles</div>
-                </div>
-                <div class="story-savings">Saved $450</div>
-            </div>
-            <div class="story-content">
-                <h4>Ignition/Distributor Engine Speed Input</h4>
-                <p>Shop said "replace distributor, $520." Stalling randomly, no start when hot.</p>
-                <div class="story-fix">
-                    <strong>The Fix:</strong> Checked the CPS (crank position sensor) first - known issue. Replaced ($45). Still had issues. Found the distributor pickup coil was failing when hot. Replaced just the pickup coil ($85) instead of whole distributor. Fixed.
-                </div>
-            </div>
-        </article>
-
-        <!-- Story 39 -->
-        <article class="story-card">
-            <div class="story-header">
-                <div class="story-number">39</div>
-                <div class="story-meta">
-                    <div class="story-code">P0457</div>
-                    <div class="story-vehicle">2017 Subaru Outback • 45K miles</div>
-                </div>
-                <div class="story-savings">Saved $380</div>
-            </div>
-            <div class="story-content">
-                <h4>EVAP Leak - Loose Cap</h4>
-                <p>Dealer said "smoke test and possible canister replacement $680."</p>
-                <div class="story-fix">
-                    <strong>The Fix:</strong> Checked the gas cap - customer was clicking it 3 times but seal was deformed. Replaced with OEM ($45). Code cleared. Also found the fuel filler door spring was broken, causing cap to not seal evenly. Fixed spring ($0, bent back into shape).
-                </div>
-            </div>
-        </article>
-
-        <!-- Story 40 -->
-        <article class="story-card">
-            <div class="story-header">
-                <div class="story-number">40</div>
-                <div class="story-meta">
-                    <div class="story-code">P0118</div>
-                    <div class="story-vehicle">2009 Dodge Journey • 98K miles</div>
-                </div>
-                <div class="story-savings">Saved $420</div>
-            </div>
-            <div class="story-content">
-                <h4>ECT Sensor Circuit High</h4>
-                <p>Shop said "replace thermostat and temp sensor, $480." Temp gauge pegged hot, fans on constantly.</p>
-                <div class="story-fix">
-                    <strong>The Fix:</strong> Found the ECT sensor connector was full of coolant - o-ring failed. Replaced sensor with new o-ring ($35). Also found the wires were corroded back 3 inches. Repaired with new pigtail ($25). Gauge reads normal now.
-                </div>
-            </div>
-        </article>
-
-        <!-- Story 41 -->
-        <article class="story-card">
-            <div class="story-header">
-                <div class="story-number">41</div>
-                <div class="story-meta">
-                    <div class="story-code">P0301</div>
-                    <div class="story-vehicle">2016 Ford Mustang • 34K miles</div>
-                </div>
-                <div class="story-savings">Saved $650</div>
-            </div>
-            <div class="story-content">
-                <h4>Cylinder 1 Misfire 2.3L EcoBoost</h4>
-                <p>Dealer said "carbon buildup, need walnut blast $750."</p>
-                <div class="story-fix">
-                    <strong>The Fix:</strong> Moved coil 1 to cylinder 3 - code moved. Bad coil. Replaced all 4 with Motorcraft ($220). Then did a chemical intake cleaning with CRC cleaner ($12). Misfire gone. Carbon wasn't bad enough for walnut blast at 34K.
-                </div>
-            </div>
-        </article>
-
-        <!-- Story 42 -->
-        <article class="story-card">
-            <div class="story-header">
-                <div class="story-number">42</div>
-                <div class="story-meta">
-                    <div class="story-code">P0497</div>
-                    <div class="story-vehicle">2008 Honda Fit • 156K miles</div>
-                </div>
-                <div class="story-savings">Saved $520</div>
-            </div>
-            <div class="story-content">
-                <h4>EVAP Low Purge Flow</h4>
-                <p>Shop said "replace canister and purge valve, $620."</p>
-                <div class="story-fix">
-                    <strong>The Fix:</strong> Found the purge valve hose was kinked from someone moving the intake manifold recently. Rerouted hose properly ($0). Also replaced the valve since it was original ($45). Flow restored, monitor passed.
-                </div>
-            </div>
-        </article>
-
-        <!-- Story 43 -->
-        <article class="story-card">
-            <div class="story-header">
-                <div class="story-number">43</div>
-                <div class="story-meta">
-                    <div class="story-code">P0141</div>
-                    <div class="story-vehicle">2005 Toyota Sienna • 178K miles</div>
-                </div>
-                <div class="story-savings">Saved $380</div>
-            </div>
-            <div class="story-content">
-                <h4>O2 Sensor Heater Bank 1 Sensor 2</h4>
-                <p>Shop said "replace downstream O2, $420."</p>
-                <div class="story-fix">
-                    <strong>The Fix:</strong> Checked the fuse - good. Found the sensor harness was damaged by a rodent, wires chewed through. Repaired with solder and heat shrink, added split loom ($15). Sensor was fine, just wiring damage.
-                </div>
-            </div>
-        </article>
-
-        <!-- Story 44 -->
-        <article class="story-card">
-            <div class="story-header">
-                <div class="story-number">44</div>
-                <div class="story-meta">
-                    <div class="story-code">P0305</div>
-                    <div class="story-vehicle">2011 F-150 • 127K miles</div>
-                </div>
-                <div class="story-savings">Saved $1,400</div>
-            </div>
-            <div class="story-content">
-                <h4>Cylinder 5 Misfire 3.5L EcoBoost</h4>
-                <p>Shop said "replace all coils and plugs, carbon cleanup $1,600."</p>
-                <div class="story-fix">
-                    <strong>The Fix:</strong> Cylinder 5 is hard to reach but swapped coil with cylinder 3 - code moved. Replaced just that coil ($85). Found the spark plug was original and gap was huge. Replaced all 6 plugs ($95). Misfire gone.
-                </div>
-            </div>
-        </article>
-
-        <!-- Story 45 -->
-        <article class="story-card">
-            <div class="story-header">
-                <div class="story-number">45</div>
-                <div class="story-meta">
-                    <div class="story-code">P0411</div>
-                    <div class="story-vehicle">2004 Volkswagen Jetta • 167K miles</div>
-                </div>
-                <div class="story-savings">Saved $680</div>
-            </div>
-            <div class="story-content">
-                <h4>Secondary Air Injection Incorrect Flow</h4>
-                <p>Shop said "replace SAI pump and combi valve $780."</p>
-                <div class="story-fix">
-                    <strong>The Fix:</strong> Found the vacuum line to the combi valve was disconnected. Reconnected ($0). Valve was seized from carbon. Removed and cleaned with carb cleaner, freed up the pintle ($0). Pump was fine. Code cleared.
-                </div>
-            </div>
-        </article>
-
-        <!-- Story 46 -->
-        <article class="story-card">
-            <div class="story-header">
-                <div class="story-number">46</div>
-                <div class="story-meta">
-                    <div class="story-code">P0125</div>
-                    <div class="story-vehicle">2007 Lexus ES350 • 134K miles</div>
-                </div>
-                <div class="story-savings">Saved $890</div>
-            </div>
-            <div class="story-content">
-                <h4>Insufficient Coolant Temp for Closed Loop</h4>
-                <p>Shop said "replace thermostat and temp sensor $980."</p>
-                <div class="story-fix">
-                    <strong>The Fix:</strong> Thermostat was indeed stuck open (verified with scan tool - never reached 160°F). Replaced with OEM ($65). Also found the coolant was low due to seeping water pump weep hole. Replaced pump ($145) since it was original. Now reaches temp properly.
-                </div>
-            </div>
-        </article>
-
-        <!-- Story 47 -->
-        <article class="story-card">
-            <div class="story-header">
-                <div class="story-number">47</div>
-                <div class="story-meta">
-                    <div class="story-code">P0463</div>
-                    <div class="story-vehicle">2012 Ram 2500 • 98K miles</div>
-                </div>
-                <div class="story-savings">Saved $680</div>
-            </div>
-            <div class="story-content">
-                <h4>Fuel Level Sensor Circuit High</h4>
-                <p>Shop said "replace fuel pump module $780." Fuel gauge erratic, showing empty when full.</p>
-                <div class="story-fix">
-                    <strong>The Fix:</strong> These have a known issue with the fuel level sensor contacts. Removed the bed (easier than dropping tank on these), pulled the module, and cleaned the sensor contacts with electrical cleaner and pencil eraser ($0). Also bent the float arm slightly for better contact. Gauge accurate now.
-                </div>
-            </div>
-        </article>
-
-        <!-- Story 48 -->
-        <article class="story-card">
-            <div class="story-header">
-                <div class="story-number">48</div>
-                <div class="story-meta">
-                    <div class="story-code">P0404</div>
-                    <div class="story-vehicle">2006 Chevy Impala • 156K miles</div>
-                </div>
-                <div class="story-savings">Saved $520</div>
-            </div>
-            <div class="story-content">
-                <h4>EGR Range/Performance</h4>
-                <p>Shop said "replace EGR valve $580."</p>
-                <div class="story-fix">
-                    <strong>The Fix:</strong> Removed the EGR valve - pintle was carboned up and sticking. Cleaned thoroughly with carb cleaner and a brass brush ($12 cleaner). Also cleaned the EGR passages in the intake which were 80% blocked. Reused gasket with RTV. Works like new.
-                </div>
-            </div>
-        </article>
-
-        <!-- Story 49 -->
-        <article class="story-card">
-            <div class="story-header">
-                <div class="story-number">49</div>
-                <div class="story-meta">
-                    <div class="story-code">P0130</div>
-                    <div class="story-vehicle">2009 Nissan Rogue • 112K miles</div>
-                </div>
-                <div class="story-savings">Saved $450</div>
-            </div>
-            <div class="story-content">
-                <h4>O2 Sensor Circuit Bank 1 Sensor 1</h4>
-                <p>Shop said "replace upstream O2, $520."</p>
-                <div class="story-fix">
-                    <strong>The Fix:</strong> Found the sensor connector was corroded from water intrusion. Cleaned with contact cleaner and dielectric grease. Code returned. Replaced the pigtail connector ($35) and spliced properly with heat shrink. Sensor was fine.
-                </div>
-            </div>
-        </article>
-
-        <!-- Story 50 -->
-        <article class="story-card">
-            <div class="story-header">
-                <div class="story-number">50</div>
-                <div class="story-meta">
-                    <div class="story-code">P0174</div>
-                    <div class="story-vehicle">2004 Ford F-150 • 198K miles</div>
-                </div>
-                <div class="story-savings">Saved $1,200</div>
-            </div>
-            <div class="story-content">
-                <h4>System Too Lean Bank 2</h4>
-                <p>Shop said "intake manifold gaskets, possible injector $1,400."</p>
-                <div class="story-fix">
-                    <strong>The Fix:</strong> Smoke tested myself - found massive leak at the PCV hose elbow on bank 2 side. Replaced elbow and hose ($28). Also found the fuel filter was original and restricting flow. Replaced filter ($25). Fuel trims normalized from +25% to under 5%.
-                </div>
-            </div>
-        </article>
-
-    </section>
-
-    <!-- CTA Section -->
-    <section class="cta-section">
-        <h2>Got a Check Engine Light?</h2>
-        <p>Don't panic. Don't pay $800 for a $50 fix. Search our database of real repairs from real mechanics who've been there.</p>
-    </section>
-
-    <!-- Popular Section -->
-    <section class="browse-section">
-        <h2 class="section-title">Most Popular This Week</h2>
-        <p class="section-subtitle">Fixes that saved owners thousands</p>
+        .story-image{
+            height:180px;
+            position:relative;
+            overflow:hidden;
+        }
         
-        <div class="popular-grid">
-            <div class="popular-card">
-                <span class="popular-badge">HOT</span>
-                <h4>P0420 Quick Check</h4>
-                <p>Before you replace that cat, check this one thing that fools dealers every time...</p>
-            </div>
-            <div class="popular-card">
-                <span class="popular-badge">NEW</span>
-                <h4>EcoBoost Misfire Fix</h4>
-                <p>Why your F-150 shakes at idle and why it's not carbon buildup (yet)...</p>
-            </div>
-            <div class="popular-card">
-                <span class="popular-badge">SAVED $3K</span>
-                <h4>Transmission "Rebuild"</h4>
-                <p>When a $45 solenoid fixes what shops want $3,500 to repair...</p>
-            </div>
-        </div>
-    </section>
-
-    <!-- Trucks Section -->
-    <section class="cta-section" style="background: linear-gradient(180deg, rgba(74,144,217,0.1) 0%, transparent 100%);">
-        <h2>Built for Trucks,<br>Not Just Priuses</h2>
-        <p>From lifted F-250s to trail-rigged Jeeps. We cover the codes that matter when you're 50 miles from pavement.</p>
-    </section>
-
-    <!-- Donation Section -->
-    <section class="donate-section">
-        <h2>Keep the Garage Open</h2>
-        <p>Every donation helps us add more fixes, keep the site running, and stick it to the dealers. If we saved you money, throw us a few bucks.</p>
-        <a href="#" class="cash-app">📱 $sw3895</a>
-        <p style="margin-top: 1rem; font-size: 0.9rem; color: var(--text-secondary);">Or scan with your Cash App • Every dollar keeps us independent</p>
-    </section>
-
-    <!-- Footer -->
-    <footer class="footer">
-        <h3>Join the Brotherhood</h3>
-        <p>50 fixes and growing. Every story saves someone from a dealer's wallet.</p>
-        <p style="margin-top: 2rem; font-size: 0.8rem;">© 2024 Garage Wisdom. Built in the shop, not the boardroom.</p>
-    </footer>
-
-</body>
-</html>
+        .story-image img{
+            width:100%;
+            height:100%;
+            object-fit:cover;
+            transition:transform 0.3s;
+        }
+        
+        .story-card:hover .story-image img{transform:scale(1.1)}
+        
+        .story-badge{
+            position:absolute;
+            top:1rem;left:1rem;
+            background:var(--orange);
+            color:#fff;
+            padding:0.25rem 0.75rem;
+            border-radius:4px;
+            font-size:0.85rem;
+            font-weight:700;
+            font-family:'Oswald',sans-serif;
+        }
+        
+        .story-content{padding:1.5rem}
+        
+        .story-meta{
+            display:flex;
+            align-items:center;
+            gap:0.75rem;
+            margin-bottom:1rem;
+        }
+        
+        .avatar{
+            width:36px;
+            height:36px;
+            border-radius:50%;
+            background:linear-gradient(135deg,var(--orange),var(--orange-dark));
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            font-weight:700;
+            font-size:0.9rem;
+        }
+        
+        .author-info h4{font-size:0.95rem;margin-bottom:0.1rem}
+        .author-info p{font-size:0.8rem;color:var(--text-dim)}
+        
+        .story-title{
+            font-family:'Oswald',sans-serif;
+            font-size:1.25rem;
+            margin-bottom:0.75rem;
+            line-height:1.3;
+        }
+        
+        .story-desc{
+            color:var(--text-dim);
+            font-size:0.95rem;
+            margin-bottom:1rem;
+            display:-webkit-box;
+            -webkit-line-clamp:2;
+            -webkit-box-orient:vertical;
+            overflow:hidden;
+        }
+        
+        .story-footer{
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            padding-top:1rem;
+            border-top:1px solid rgba(255,255,255,0.05);
+        }
+        
+        .savings{
+            color:var(--success);
+            font-weight:700;
+            font-size:1.1rem;
+        }
+        
+        .success-rate{
+            display:flex;
+            align-items:center;
+            gap:0.5rem;
+            color:var(--text-dim);
+            font-size:0.9rem;
+        }
+        
+        .image-banner{
+            height:400px;
+            background:linear-gradient(90deg,rgba(18,20,24,0.95) 0%,rgba(18,20,24,0.6) 50%,rgba(18,20,24,0.3) 100%),
+                       url('https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?w=1920&q=80') center/cover;
+            display:flex;
+            align-items:center;
+            padding:0 10%;
+            position:relative;
+        }
+        
+        .banner-content{
+            max-width:600px;
+            position:relative;
+            z-index:2;
+        }
+        
+        .banner-content h2{
+            font-size:3rem;
+            margin-bottom:1rem;
+            line-height:1.1;
+        }
+        
+        .banner-content p{
+            font-size:1.2rem;
+            color:var(--text-dim);
+            margin-bottom:2rem;
+        }
+        
+        .btn{
+            display:inline-flex;
+            align-items:center;
+            gap:0.75rem;
+            background:var(--orange);
+            color:#fff;
+            padding:1rem 2rem;
+            border-radius:4px;
+            text-decoration:none;
+            font-weight:700;
+            text-transform:uppercase;
+            letter-spacing:0.05em;
+            border:none;
+            cursor:pointer;
+            transition:all 0.3s;
+            font-family:'Roboto Condensed',sans-serif;
+            font-size:1rem;
+        }
+        
+        .btn:hover{
+            background:var(--orange-dark);
+            transform:translateY(-2px);
+            box-shadow:0 10px 30px rgba(255,69,0,0.3);
+        }
+        
+        .btn-outline{
+            background:transparent;
+            border:2px solid var(--orange);
+            margin-left:1rem;
+        }
+        
+        .btn-outline:hover{background:var(--orange)}
+        
+        .btn-cashapp{
+            background:var(--cashapp);
+            color:#000;
+        }
+        
+        .btn-cashapp:hover{
+            background:#00b82c;
+            box-shadow:0 10px 30px rgba(0,214,50,0.3);
+        }
+        
+        .offroad-banner{
+            height:400px;
+            background:linear-gradient(270deg,rgba(18,20,24,0.95) 0%,rgba(18,20,24,0.6) 50%,rgba(18,20,24,0.3) 100%),
+                       url('https://images.unsplash.com/photo-1532581140115-ca3d01490791?w=1920&q=80') center/cover;
+            display:flex;
+            align-items:center;
+            justify-content:flex-end;
+            padding:0 10%;
+        }
+        
+        .truck-banner{
+            height:400px;
+            background:linear-gradient(180deg,rgba(18,20,24,0.8) 0%,rgba(18,20,24,0.4) 100%),
+                       url('https://images.unsplash.com/photo-1605893474270-1d0d9f8e8c72?w=1920&q=80') center/cover;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            text-align:center;
+            padding:2rem;
+        }
+        
+        .donate-section{
+            padding:4rem 2rem;
+            background:linear-gradient(135deg,rgba(0,214,50,0.05),rgba(255,69,0,0.05));
+            text-align:center;
+            border-top:1px solid rgba(255,255,255,0.05);
+            border-bottom:1px solid rgba(255,255,255,0.05);
+        }
+        
+        .donate-section h2{
+            font-size:2.5rem;
+            margin-bottom:1rem;
+        }
+        
+        .donate-section p{
+            color:var(--text-dim);
+            max-width:600px;
+            margin:0 auto 2rem;
+            font-size:1.1rem;
+        }
+        
+        .donate-buttons{
+            display:flex;
+            justify-content:center;
+            gap:1rem;
+            flex-wrap:wrap;
+        }
+        
+        .cashapp-tag{
+            display:inline-flex;
+            align-items:center;
+            gap:0.5rem;
+            background:rgba(0,214,50,0.1);
+            border:2px solid var(--cashapp);
+            color:var(--cashapp);
+            padding:1rem 2rem;
+            border-radius:4px;
+            font-family:'Oswald',sans-serif;
+            font-size:1.2rem;
+            font-weight:700;
+            margin-top:1rem;
+        }
+        
+        .modal{
+            display:none;
+            position:fixed;
+            top:0;left:0;
+            width:100%;height:100%;
+            background:rgba(0,0,0,0.9);
+            z-index:2000;
+            justify-content:center;
+            align-items:center;
+            padding:2rem;
+            overflow-y:auto;
+        }
+        
+        .modal.active{display:flex}
+        
+        .modal-content{
+            background:var(--dark);
+            border-radius:8px;
+            max-width:600px;
+            width:100%;
+            border:1px solid rgba(255,255,255,0.1);
+            max-height:90vh;
+            overflow-y:auto;
+        }
+        
+        .modal-header{
+            padding:1.5rem;
+            border-bottom:1px solid rgba(255,255,255,0.1);
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            background:var(--steel);
+        }
+        
+        .modal-header h2{font-size:1.5rem}
+        
+        .close-btn{
+            background:none;
+            border:none;
+            color:var(--text);
+            font-size:2rem;
+            cursor:pointer;
+            opacity:0.6;
+            transition:opacity 0.3s;
+        }
+        
+        .close-btn:hover{opacity:1;color:var(--orange)}
+        
+        .modal-body{padding:1.5rem}
+        
+        .form-group{margin-bottom:1.5rem}
+        
+        .form-group label{
+            display:block;
+            margin-bottom:0.5rem;
+            font-weight:700;
+            text-transform:uppercase;
+            font-size:0.9rem;
+            color:var(--text-dim);
+        }
+        
+        .form-group input,
+        .form-group textarea,
+        .form-group select{
+            width:100%;
+            padding:0.75rem 1rem;
+            background:rgba(0,0,0,0.3);
+            border:1px solid rgba(255,255,255,0.1);
+            border-radius:4px;
+            color:var(--text);
+            font-family:'Roboto Condensed',sans-serif;
+            font-size:1rem;
+        }
+        
+        .form-group input:focus,
+        .form-group textarea:focus{
+            outline:none;
+ 
