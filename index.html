@@ -55,7 +55,7 @@
             pointer-events:none;
         }
         
-        .hero-content{position:relative;z-index:2;max-width:800px}
+        .hero-content{position:relative;z-index:2;max-width:900px;width:100%}
         
         .hero-badge{
             display:inline-flex;
@@ -94,9 +94,15 @@
             letter-spacing:0.05em;
         }
         
+        .search-container{
+            width:100%;
+            max-width:700px;
+            position:relative;
+            margin:0 auto;
+        }
+        
         .search-box{
             width:100%;
-            max-width:600px;
             position:relative;
         }
         
@@ -126,6 +132,113 @@
             outline:none;
             border-color:var(--orange);
             box-shadow:0 0 20px rgba(255,69,0,0.3);
+        }
+        
+        .code-filter-bar{
+            display:flex;
+            gap:0.5rem;
+            margin-top:1rem;
+            flex-wrap:wrap;
+            justify-content:center;
+            padding:0 1rem;
+        }
+        
+        .code-btn{
+            background:rgba(255,69,0,0.2);
+            border:2px solid var(--orange);
+            color:var(--orange);
+            padding:0.6rem 1.2rem;
+            border-radius:6px;
+            font-family:'Oswald',sans-serif;
+            font-size:0.95rem;
+            font-weight:700;
+            cursor:pointer;
+            transition:all 0.3s;
+            text-transform:uppercase;
+        }
+        
+        .code-btn:hover, .code-btn.active{
+            background:var(--orange);
+            color:#fff;
+            transform:translateY(-2px);
+        }
+        
+        .search-suggestions{
+            position:absolute;
+            top:100%;
+            left:0;
+            right:0;
+            background:var(--dark);
+            border:1px solid rgba(255,255,255,0.1);
+            border-top:none;
+            border-radius:0 0 8px 8px;
+            max-height:400px;
+            overflow-y:auto;
+            display:none;
+            z-index:100;
+            text-align:left;
+        }
+        
+        .search-suggestions.active{display:block}
+        
+        .suggestion-item{
+            padding:0.75rem 1rem;
+            cursor:pointer;
+            border-bottom:1px solid rgba(255,255,255,0.05);
+            display:flex;
+            align-items:center;
+            gap:0.75rem;
+        }
+        
+        .suggestion-item:hover{
+            background:rgba(255,69,0,0.1);
+        }
+        
+        .suggestion-code{
+            background:var(--orange);
+            color:#fff;
+            padding:0.25rem 0.5rem;
+            border-radius:4px;
+            font-size:0.75rem;
+            font-weight:700;
+            min-width:60px;
+            text-align:center;
+        }
+        
+        .suggestion-text{
+            font-size:0.9rem;
+            flex:1;
+        }
+        
+        .suggestion-type{
+            font-size:0.75rem;
+            color:var(--text-dim);
+            text-transform:uppercase;
+        }
+        
+        .quick-tags{
+            display:flex;
+            gap:0.5rem;
+            margin-top:1rem;
+            flex-wrap:wrap;
+            justify-content:center;
+        }
+        
+        .quick-tag{
+            background:rgba(255,255,255,0.1);
+            border:1px solid rgba(255,255,255,0.2);
+            color:var(--text-dim);
+            padding:0.4rem 1rem;
+            border-radius:20px;
+            font-size:0.85rem;
+            cursor:pointer;
+            transition:all 0.3s;
+        }
+        
+        .quick-tag:hover{
+            background:var(--orange);
+            border-color:var(--orange);
+            color:#fff;
         }
         
         .nav{
@@ -775,6 +888,37 @@
             margin-bottom:1rem;
         }
         
+        .search-results-info{
+            background:var(--steel);
+            padding:1rem;
+            border-radius:8px;
+            margin-bottom:1.5rem;
+            text-align:center;
+        }
+        
+        .code-info-card{
+            background:linear-gradient(135deg,rgba(255,69,0,0.1),rgba(255,69,0,0.05));
+            border:2px solid var(--orange);
+            border-radius:8px;
+            padding:2rem;
+            margin-bottom:2rem;
+        }
+        
+        .code-info-card h3{
+            color:var(--orange);
+            font-size:1.5rem;
+            margin-bottom:1rem;
+        }
+        
+        .code-info-card p{
+            margin-bottom:1rem;
+            line-height:1.6;
+        }
+        
+        .related-fixes{
+            margin-top:1.5rem;
+        }
+        
         .footer{
             background:var(--dark);
             padding:3rem 2rem;
@@ -845,6 +989,8 @@
             .story-grid{grid-template-columns:1fr}
             .cost-grid{grid-template-columns:1fr}
             .donate-buttons{flex-direction:column;align-items:center}
+            .code-filter-bar{gap:0.4rem}
+            .code-btn{padding:0.5rem 0.8rem;font-size:0.85rem}
         }
     </style>
 </head>
@@ -868,9 +1014,35 @@
                 <span>50+ Real Fixes • $100K+ Saved</span>
             </div>
             <h1>Real Fixes for <span>Real Rides</span></h1>
-            <p>No bullshit. No $1200 dealer quotes. Just the exact repair that worked.</p>
-            <div class="search-box">
-                <input type="text" placeholder="Enter code (P0420) or problem..." id="searchInput">
+            <p>Search any OBD code (P0XXX, P1XXX, B0XXX, etc.) or symptom</p>
+            
+            <div class="search-container">
+                <div class="search-box">
+                    <input type="text" placeholder="Enter code: P0420, P1781, B1342..." id="searchInput" autocomplete="off">
+                </div>
+                <div class="search-suggestions" id="searchSuggestions"></div>
+                
+                <!-- Code Filter Bar - Quick access to common codes -->
+                <div class="code-filter-bar">
+                    <button class="code-btn" onclick="quickCodeSearch('P0420')" title="Catalytic Converter">P0420</button>
+                    <button class="code-btn" onclick="quickCodeSearch('P0300')" title="Random Misfire">P0300</button>
+                    <button class="code-btn" onclick="quickCodeSearch('P0171')" title="System Too Lean">P0171</button>
+                    <button class="code-btn" onclick="quickCodeSearch('P0455')" title="EVAP Leak">P0455</button>
+                    <button class="code-btn" onclick="quickCodeSearch('O2')" title="Oxygen Sensors">O2</button>
+                    <button class="code-btn" onclick="quickCodeSearch('P0401')" title="EGR System">P0401</button>
+                    <button class="code-btn" onclick="quickCodeSearch('TRANS')" title="Transmission">TRANS</button>
+                    <button class="code-btn" onclick="clearFilter()" title="Show All">ALL</button>
+                </div>
+                
+                <!-- Quick Tags for common searches -->
+                <div class="quick-tags">
+                    <span class="quick-tag" onclick="quickSearch('Honda')">Honda</span>
+                    <span class="quick-tag" onclick="quickSearch('Ford')">Ford</span>
+                    <span class="quick-tag" onclick="quickSearch('Toyota')">Toyota</span>
+                    <span class="quick-tag" onclick="quickSearch('misfire')">Misfire</span>
+                    <span class="quick-tag" onclick="quickSearch('sensor')">Sensor</span>
+                    <span class="quick-tag" onclick="quickSearch('leak')">Leak</span>
+                </div>
             </div>
         </div>
     </section>
@@ -951,10 +1123,12 @@
                 <h2 id="gridTitle">Latest Battle-Tested Fixes</h2>
                 <p id="gridSubtitle">Stories from the garage, not the dealership</p>
             </div>
+            <div class="search-results-info" id="searchResultsInfo" style="display:none"></div>
+            <div id="codeInfoDisplay"></div>
             <div class="story-grid" id="storyGrid"></div>
             <div class="no-results" id="noResults" style="display:none">
                 <h3>No fixes found</h3>
-                <p>Try searching for P0420, misfire, or your specific code</p>
+                <p>Try clicking one of the code buttons above or search for: <strong>P0420</strong>, <strong>misfire</strong>, <strong>Honda</strong>, <strong>coil</strong>, <strong>leak</strong>, or <strong>sensor</strong></p>
                 <button class="btn" onclick="clearFilter()" style="margin-top:1rem">Show All Fixes</button>
             </div>
         </section>
@@ -1193,6 +1367,144 @@
     </footer>
 
     <script>
+        // EXTENDED OBD-II CODE DATABASE
+        const obdCodes = {
+            // Powertrain Codes (P0XXX)
+            'P0100': { desc: 'Mass Air Flow Circuit Malfunction', system: 'Air/Fuel', common: 'MAF sensor, wiring' },
+            'P0101': { desc: 'Mass Air Flow Circuit Range/Performance', system: 'Air/Fuel', common: 'Dirty MAF, air leak' },
+            'P0102': { desc: 'Mass Air Flow Circuit Low Input', system: 'Air/Fuel', common: 'MAF sensor, wiring' },
+            'P0103': { desc: 'Mass Air Flow Circuit High Input', system: 'Air/Fuel', common: 'MAF sensor, wiring' },
+            'P0110': { desc: 'Intake Air Temperature Circuit', system: 'Air/Fuel', common: 'IAT sensor' },
+            'P0115': { desc: 'Engine Coolant Temperature Circuit', system: 'Cooling', common: 'ECT sensor, thermostat' },
+            'P0116': { desc: 'ECT Range/Performance', system: 'Cooling', common: 'Thermostat, coolant level' },
+            'P0120': { desc: 'Throttle Position Sensor Circuit', system: 'Throttle', common: 'TPS sensor' },
+            'P0121': { desc: 'TPS Range/Performance', system: 'Throttle', common: 'TPS sensor, binding' },
+            'P0125': { desc: 'Insufficient Coolant Temperature', system: 'Cooling', common: 'Thermostat stuck open' },
+            'P0130': { desc: 'O2 Sensor Circuit Bank 1 Sensor 1', system: 'Emissions', common: 'O2 sensor, wiring' },
+            'P0131': { desc: 'O2 Sensor Low Voltage Bank 1 Sensor 1', system: 'Emissions', common: 'O2 sensor, exhaust leak' },
+            'P0132': { desc: 'O2 Sensor High Voltage Bank 1 Sensor 1', system: 'Emissions', common: 'O2 sensor, rich condition' },
+            'P0133': { desc: 'O2 Sensor Slow Response Bank 1 Sensor 1', system: 'Emissions', common: 'Lazy O2 sensor' },
+            'P0134': { desc: 'O2 Sensor No Activity Bank 1 Sensor 1', system: 'Emissions', common: 'Dead O2 sensor' },
+            'P0135': { desc: 'O2 Sensor Heater Circuit Bank 1 Sensor 1', system: 'Emissions', common: 'Heater circuit, wiring' },
+            'P0136': { desc: 'O2 Sensor Circuit Bank 1 Sensor 2', system: 'Emissions', common: 'Rear O2 sensor' },
+            'P0137': { desc: 'O2 Sensor Low Voltage Bank 1 Sensor 2', system: 'Emissions', common: 'Rear O2, wiring' },
+            'P0138': { desc: 'O2 Sensor High Voltage Bank 1 Sensor 2', system: 'Emissions', common: 'Rear O2, cat efficiency' },
+            'P0140': { desc: 'O2 Sensor No Activity Bank 1 Sensor 2', system: 'Emissions', common: 'Rear O2 sensor' },
+            'P0141': { desc: 'O2 Sensor Heater Circuit Bank 1 Sensor 2', system: 'Emissions', common: 'Heater circuit' },
+            'P0150': { desc: 'O2 Sensor Circuit Bank 2 Sensor 1', system: 'Emissions', common: 'O2 sensor, V6/V8' },
+            'P0155': { desc: 'O2 Sensor Heater Circuit Bank 2 Sensor 1', system: 'Emissions', common: 'Heater circuit' },
+            'P0160': { desc: 'O2 Sensor Circuit Bank 2 Sensor 2', system: 'Emissions', common: 'Rear O2 sensor' },
+            'P0171': { desc: 'System Too Lean Bank 1', system: 'Air/Fuel', common: 'Vacuum leak, MAF, fuel pressure' },
+            'P0172': { desc: 'System Too Rich Bank 1', system: 'Air/Fuel', common: 'MAF, injectors, fuel pressure' },
+            'P0174': { desc: 'System Too Lean Bank 2', system: 'Air/Fuel', common: 'Vacuum leak, V6/V8' },
+            'P0175': { desc: 'System Too Rich Bank 2', system: 'Air/Fuel', common: 'MAF, injectors' },
+            'P0200': { desc: 'Injector Circuit Malfunction', system: 'Fuel', common: 'Wiring, PCM' },
+            'P0201': { desc: 'Injector Circuit Cylinder 1', system: 'Fuel', common: 'Injector, wiring' },
+            'P0202': { desc: 'Injector Circuit Cylinder 2', system: 'Fuel', common: 'Injector, wiring' },
+            'P0203': { desc: 'Injector Circuit Cylinder 3', system: 'Fuel', common: 'Injector, wiring' },
+            'P0204': { desc: 'Injector Circuit Cylinder 4', system: 'Fuel', common: 'Injector, wiring' },
+            'P0300': { desc: 'Random/Multiple Cylinder Misfire', system: 'Ignition', common: 'Coils, plugs, vacuum leak' },
+            'P0301': { desc: 'Cylinder 1 Misfire', system: 'Ignition', common: 'Coil, plug, injector' },
+            'P0302': { desc: 'Cylinder 2 Misfire', system: 'Ignition', common: 'Coil, plug, injector' },
+            'P0303': { desc: 'Cylinder 3 Misfire', system: 'Ignition', common: 'Coil, plug, injector' },
+            'P0304': { desc: 'Cylinder 4 Misfire', system: 'Ignition', common: 'Coil, plug, injector' },
+            'P0305': { desc: 'Cylinder 5 Misfire', system: 'Ignition', common: 'Coil, plug, injector' },
+            'P0306': { desc: 'Cylinder 6 Misfire', system: 'Ignition', common: 'Coil, plug, injector' },
+            'P0316': { desc: 'Misfire Detected on Startup', system: 'Ignition', common: 'Coils, cold start issue' },
+            'P0325': { desc: 'Knock Sensor Circuit', system: 'Ignition', common: 'Knock sensor, wiring' },
+            'P0330': { desc: 'Knock Sensor 2 Circuit', system: 'Ignition', common: 'Knock sensor' },
+            'P0335': { desc: 'Crankshaft Position Sensor Circuit', system: 'Ignition', common: 'CKP sensor, wiring' },
+            'P0336': { desc: 'Crankshaft Position Sensor Range', system: 'Ignition', common: 'CKP sensor, reluctor' },
+            'P0340': { desc: 'Camshaft Position Sensor Circuit', system: 'Ignition', common: 'CMP sensor, wiring' },
+            'P0341': { desc: 'Camshaft Position Sensor Range', system: 'Ignition', common: 'CMP sensor, timing' },
+            'P0400': { desc: 'EGR Flow Malfunction', system: 'Emissions', common: 'EGR valve, clogged passages' },
+            'P0401': { desc: 'Insufficient EGR Flow', system: 'Emissions', common: 'Clogged EGR, DPFE sensor' },
+            'P0402': { desc: 'Excessive EGR Flow', system: 'Emissions', common: 'Stuck EGR valve' },
+            'P0403': { desc: 'EGR Circuit Malfunction', system: 'Emissions', common: 'Wiring, solenoid' },
+            'P0404': { desc: 'EGR Circuit Range/Performance', system: 'Emissions', common: 'DPFE sensor' },
+            'P0405': { desc: 'EGR Sensor A Circuit Low', system: 'Emissions', common: 'DPFE sensor' },
+            'P0420': { desc: 'Catalyst Efficiency Below Threshold Bank 1', system: 'Emissions', common: 'Cat, O2 sensors, exhaust leak' },
+            'P0430': { desc: 'Catalyst Efficiency Below Threshold Bank 2', system: 'Emissions', common: 'Cat, V6/V8' },
+            'P0440': { desc: 'Evaporative Emission System', system: 'EVAP', common: 'Gas cap, leak' },
+            'P0441': { desc: 'EVAP Incorrect Purge Flow', system: 'EVAP', common: 'Purge valve' },
+            'P0442': { desc: 'EVAP Small Leak Detected', system: 'EVAP', common: 'Gas cap, small leak' },
+            'P0446': { desc: 'EVAP Vent Control Circuit', system: 'EVAP', common: 'Vent valve, wiring' },
+            'P0455': { desc: 'EVAP Large Leak Detected', system: 'EVAP', common: 'Gas cap, vent valve, lines' },
+            'P0456': { desc: 'EVAP Very Small Leak', system: 'EVAP', common: 'Pinhole leak, gas cap' },
+            'P0460': { desc: 'Fuel Level Sensor Circuit', system: 'Fuel', common: 'Fuel sender, wiring' },
+            'P0463': { desc: 'Fuel Level Sensor High Input', system: 'Fuel', common: 'Fuel sender' },
+            'P0500': { desc: 'Vehicle Speed Sensor', system: 'Transmission', common: 'VSS, wiring' },
+            'P0505': { desc: 'Idle Air Control System', system: 'Idle', common: 'IAC valve, vacuum' },
+            'P0506': { desc: 'Idle Control RPM Lower Than Expected', system: 'Idle', common: 'IAC, vacuum leak' },
+            'P0507': { desc: 'Idle Control RPM Higher Than Expected', system: 'Idle', common: 'Vacuum leak, IAC' },
+            'P0560': { desc: 'System Voltage Malfunction', system: 'Electrical', common: 'Battery, alternator' },
+            'P0562': { desc: 'System Voltage Low', system: 'Electrical', common: 'Battery, alternator' },
+            'P0563': { desc: 'System Voltage High', system: 'Electrical', common: 'Alternator, regulator' },
+            'P0600': { desc: 'Serial Communication Link', system: 'PCM', common: 'PCM, wiring' },
+            'P0700': { desc: 'Transmission Control System', system: 'Transmission', common: 'TCM, transmission issue' },
+            'P0705': { desc: 'Transmission Range Sensor Circuit', system: 'Transmission', common: 'Range sensor, neutral safety' },
+            'P0715': { desc: 'Input/Turbine Speed Sensor', system: 'Transmission', common: 'Speed sensor, wiring' },
+            'P0720': { desc: 'Output Speed Sensor Circuit', system: 'Transmission', common: 'Speed sensor' },
+            'P0730': { desc: 'Incorrect Gear Ratio', system: 'Transmission', common: 'Internal transmission' },
+            'P0740': { desc: 'Torque Converter Clutch Circuit', system: 'Transmission', common: 'TCC solenoid' },
+            'P0750': { desc: 'Shift Solenoid A Malfunction', system: 'Transmission', common: 'Solenoid, wiring' },
+            'P0755': { desc: 'Shift Solenoid B Malfunction', system: 'Transmission', common: 'Solenoid, wiring' },
+            'P0760': { desc: 'Shift Solenoid C Malfunction', system: 'Transmission', common: 'Solenoid, wiring' },
+            'P1100': { desc: 'MAF Sensor Intermittent', system: 'Air/Fuel', common: 'MAF, wiring' },
+            'P1130': { desc: 'Lack of HO2S Switch Bank 1 Sensor 1', system: 'Emissions', common: 'O2 sensor, fuel trim' },
+            'P1150': { desc: 'Lack of HO2S Switch Bank 2 Sensor 1', system: 'Emissions', common: 'O2 sensor' },
+            'P1300': { desc: 'Ignitor Circuit', system: 'Ignition', common: 'Igniter, coils' },
+            'P1335': { desc: 'Crankshaft Position Sensor Circuit', system: 'Ignition', common: 'CKP sensor' },
+            'P1345': { desc: 'Cam/Crank Correlation', system: 'Timing', common: 'Timing chain/belt jumped' },
+            'P1400': { desc: 'DPFE Circuit Low', system: 'Emissions', common: 'DPFE sensor, hoses' },
+            'P1401': { desc: 'DPFE Circuit High', system: 'Emissions', common: 'DPFE sensor' },
+            'P1443': { desc: 'EVAP Control System', system: 'EVAP', common: 'Purge valve, canister' },
+            'P1450': { desc: 'Unable to Bleed Fuel Tank Vacuum', system: 'EVAP', common: 'Blockage, vent valve' },
+            'P1500': { desc: 'Vehicle Speed Sensor Intermittent', system: 'Transmission', common: 'VSS, wiring' },
+            'P1510': { desc: 'Idle Air Control Circuit', system: 'Idle', common: 'IAC valve' },
+            'P1600': { desc: 'Loss of KAM Power', system: 'PCM', common: 'Battery disconnect' },
+            'P1633': { desc: 'Keep Alive Memory Voltage Too Low', system: 'PCM', common: 'Battery, PCM' },
+            'P1705': { desc: 'Transmission Range Sensor Circuit', system: 'Transmission', common: 'Range sensor' },
+            'P1780': { desc: 'Transmission Control Switch Circuit', system: 'Transmission', common: 'Overdrive switch' },
+            'P1781': { desc: '4x4 Low Switch Circuit', system: 'Transmission', common: 'Range sensor, 4WD switch' },
+            'P1783': { desc: 'Transmission Overtemp Condition', system: 'Transmission', common: 'Cooling, heavy load' },
+            
+            // Manufacturer Specific (P1XXX)
+            'P1131': { desc: 'Lack of HO2S Switch Ford', system: 'Emissions', common: 'O2 sensor, vacuum leak' },
+            'P1151': { desc: 'Lack of HO2S Switch Ford Bank 2', system: 'Emissions', common: 'O2 sensor' },
+            'P1237': { desc: 'Fuel Pump Secondary Circuit', system: 'Fuel', common: 'Fuel pump, relay' },
+            'P1250': { desc: 'Early Fuel Evaporation Heater', system: 'Emissions', common: 'EFE heater' },
+            'P1285': { desc: 'Cylinder Head Temp Sensor', system: 'Cooling', common: 'CHT sensor' },
+            'P1440': { desc: 'EVAP Purge Valve Stuck Open', system: 'EVAP', common: 'Purge valve' },
+            'P1451': { desc: 'EVAP Canister Vent Solenoid', system: 'EVAP', common: 'Vent valve' },
+            'P1506': { desc: 'Idle Air Control Overspeed', system: 'Idle', common: 'IAC, vacuum leak' },
+            'P1507': { desc: 'Idle Air Control Underspeed', system: 'Idle', common: 'IAC, dirty throttle' },
+            'P1537': { desc: 'Intake Manifold Runner Control', system: 'Air/Fuel', common: 'IMRC, vacuum' },
+            'P1538': { desc: 'Intake Manifold Runner Control Stuck Open', system: 'Air/Fuel', common: 'IMRC' },
+            'P1740': { desc: 'Torque Converter Clutch Solenoid', system: 'Transmission', common: 'TCC solenoid' },
+            'P1744': { desc: 'Torque Converter Clutch Performance', system: 'Transmission', common: 'TCC, converter' },
+            
+            // Body Codes (B0XXX)
+            'B1342': { desc: 'ECU Defective', system: 'Body', common: 'PCM failure' },
+            'B1676': { desc: 'Battery Pack Voltage Out of Range', system: 'Body', common: 'Hybrid battery' },
+            
+            // Network Codes (U0XXX)
+            'U0100': { desc: 'Lost Communication with ECM/PCM', system: 'Network', common: 'CAN bus, wiring' },
+            'U0121': { desc: 'Lost Communication with ABS', system: 'Network', common: 'CAN bus' },
+            'U0155': { desc: 'Lost Communication with Instrument Panel', system: 'Network', common: 'CAN bus' },
+            
+            // Generic helpful terms
+            'CAT': { desc: 'Catalytic Converter Related', system: 'Emissions', common: 'P0420, P0430' },
+            'O2': { desc: 'Oxygen Sensor Related', system: 'Emissions', common: 'P0130-P0160' },
+            'MAF': { desc: 'Mass Air Flow Sensor Related', system: 'Air/Fuel', common: 'P0100-P0103' },
+            'EGR': { desc: 'Exhaust Gas Recirculation', system: 'Emissions', common: 'P0400-P0405' },
+            'EVAP': { desc: 'Evaporative Emissions', system: 'EVAP', common: 'P0440-P0456' },
+            'MISFIRE': { desc: 'Engine Misfire Related', system: 'Ignition', common: 'P0300-P0306' },
+            'LEAN': { desc: 'System Too Lean', system: 'Air/Fuel', common: 'P0171, P0174' },
+            'RICH': { desc: 'System Too Rich', system: 'Air/Fuel', common: 'P0172, P0175' },
+            'TRANS': { desc: 'Transmission Related', system: 'Transmission', common: 'P0700-P1783' }
+        };
+
         // COMPLETE DATABASE OF 50 STORIES
         const stories=[
             // P0420 - CATALYTIC CONVERTER (10 stories)
@@ -2317,241 +2629,4 @@
                 title:'Wheel Bearing Hub Assembly',
                 vehicle:'2006 Chevy Silverado 5.3L 178k miles',
                 author:'ChevyMike',
-                img:'https://images.unsplash.com/photo-1532581140115-ca3d01490791?w=400&q=80',
-                problem:'Roaring noise, play in wheel. Shop quoted $600 for bearing replacement.',
-                rabbitHole:[
-                    {title:'Press Bearing',desc:'Shop wanted to press bearing, $400 labor.'}
-                ],
-                fix:[
-                    {title:'Buy Hub Assembly',desc:'$120 complete hub with bearing.'},
-                    {title:'DIY Replacement',desc:'4 bolts, 1 hour with impact wrench.'}
-                ],
-                cost:120,
-                dealerCost:600,
-                saved:480,
-                success:82,
-                cat:'susp',
-                verdict:'Quiet ride again. Hub assembly is bolt-in, no pressing needed.',
-                proTip:'Buy hub assembly, not just bearing. Much easier DIY, saves labor.'
-            },
-            {
-                id:50,
-                code:'SUSP',
-                title:'Bushing Lubrication Fix',
-                vehicle:'2008 BMW 328i 3.0L 123k miles',
-                author:'BimmerTech',
-                img:'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&q=80',
-                problem:'Squeaking over bumps, shop quoted $900 for control arm bushings.',
-                rabbitHole:[
-                    {title:'Silicone Spray',desc:'Helped for 3 days.'}
-                ],
-                fix:[
-                    {title:'Remove and Grease',desc:'Took apart suspension, greased all bushings.'},
-                    {title:'Use Proper Grease',desc:'Silicone paste, not spray.'}
-                ],
-                cost:15,
-                dealerCost:900,
-                saved:885,
-                success:39,
-                cat:'susp',
-                verdict:'Squeak gone for 6 months now. BMW bushings dry out, just need lube.',
-                proTip:'Try greasing bushings before replacing. BMWs are notorious for dry bushings.'
-            }
-        ];
-
-        let currentFilter='all';
-        let currentStory=null;
-
-        function init(){
-            renderStories(stories,'storyGrid');
-            renderStories(stories.filter(s=>s.success>50),'popularGrid');
-            updateStats();
-            
-            document.getElementById('searchInput').addEventListener('input',handleSearch);
-        }
-
-        function renderStories(storyList,gridId){
-            const grid=document.getElementById(gridId);
-            if(!grid)return;
-            
-            if(storyList.length===0){
-                document.getElementById('noResults').style.display='block';
-                grid.innerHTML='';
-                return;
-            }
-            
-            document.getElementById('noResults').style.display='none';
-            
-            grid.innerHTML=storyList.map(story=>`
-                <div class="story-card" onclick="showDetail(${story.id})">
-                    <div class="story-image">
-                        <img src="${story.img}" alt="${story.title}" loading="lazy">
-                        <span class="story-badge">${story.code}</span>
-                    </div>
-                    <div class="story-content">
-                        <div class="story-meta">
-                            <div class="avatar">${story.author[0]}</div>
-                            <div class="author-info">
-                                <h4>${story.author}</h4>
-                                <p>${story.vehicle}</p>
-                            </div>
-                        </div>
-                        <h3 class="story-title">${story.title}</h3>
-                        <p class="story-desc">${story.problem}</p>
-                        <div class="story-footer">
-                            <span class="savings">$${story.saved.toLocaleString()} saved</span>
-                            <span class="success-rate">
-                                <span>👍</span>
-                                <span>${story.success}</span>
-                            </span>
-                        </div>
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        function filterCategory(cat){
-            currentFilter=cat;
-            const filtered=stories.filter(s=>s.cat===cat);
-            renderStories(filtered,'storyGrid');
-            
-            const catNames={
-                'p0420':'P0420 - Catalytic Converter Fixes',
-                'p0300':'P0300 - Misfire Fixes',
-                'p0171':'P0171 - Lean Condition Fixes',
-                'p0455':'P0455 - EVAP Leak Fixes',
-                'o2':'O2 Sensor Fixes',
-                'egr':'EGR System Fixes',
-                'trans':'Transmission Fixes',
-                'susp':'Suspension Fixes'
-            };
-            
-            document.getElementById('gridTitle').textContent=catNames[cat]||'Filtered Results';
-            document.getElementById('gridSubtitle').textContent=`${filtered.length} battle-tested fixes`;
-            
-            document.getElementById('mainContent').scrollIntoView({behavior:'smooth'});
-        }
-
-        function clearFilter(){
-            currentFilter='all';
-            renderStories(stories,'storyGrid');
-            document.getElementById('gridTitle').textContent='Latest Battle-Tested Fixes';
-            document.getElementById('gridSubtitle').textContent='Stories from the garage, not the dealership';
-            document.getElementById('searchInput').value='';
-        }
-
-        function handleSearch(e){
-            const query=e.target.value.toLowerCase();
-            if(!query){
-                clearFilter();
-                return;
-            }
-            
-            const filtered=stories.filter(s=>
-                s.code.toLowerCase().includes(query)||
-                s.title.toLowerCase().includes(query)||
-                s.vehicle.toLowerCase().includes(query)||
-                s.problem.toLowerCase().includes(query)
-            );
-            
-            renderStories(filtered,'storyGrid');
-            document.getElementById('gridTitle').textContent=query?`Results for "${query}"`:'Latest Battle-Tested Fixes';
-            document.getElementById('gridSubtitle').textContent=`${filtered.length} fixes found`;
-        }
-
-        function showDetail(id){
-            currentStory=stories.find(s=>s.id===id);
-            if(!currentStory)return;
-            
-            document.getElementById('mainContent').style.display='none';
-            document.querySelector('.hero').style.display='none';
-            document.querySelector('.nav').style.display='none';
-            document.getElementById('mainFooter').style.display='none';
-            
-            const detailView=document.getElementById('detailView');
-            detailView.classList.add('active');
-            
-            document.getElementById('detailHero').style.backgroundImage=`linear-gradient(180deg,transparent 0%,var(--darker) 100%),url(${currentStory.img})`;
-            document.getElementById('detailCode').textContent=currentStory.code;
-            document.getElementById('detailTitle').textContent=currentStory.title;
-            document.getElementById('detailVehicle').textContent=currentStory.vehicle;
-            document.getElementById('detailProblem').textContent=currentStory.problem;
-            
-            document.getElementById('detailRabbitHole').innerHTML=currentStory.rabbitHole.map((item,i)=>`
-                <div class="step">
-                    <div class="step-num">${i+1}</div>
-                    <div>
-                        <strong>${item.title}</strong>
-                        <p style="color:var(--text-dim);margin-top:0.25rem">${item.desc}</p>
-                    </div>
-                </div>
-            `).join('');
-            
-            document.getElementById('detailFix').innerHTML=currentStory.fix.map((item,i)=>`
-                <div class="step">
-                    <div class="step-num">${i+1}</div>
-                    <div>
-                        <strong>${item.title}</strong>
-                        <p style="color:var(--text-dim);margin-top:0.25rem">${item.desc}</p>
-                    </div>
-                </div>
-            `).join('');
-            
-            document.getElementById('detailYourCost').textContent='$'+currentStory.cost;
-            document.getElementById('detailDealerCost').textContent='$'+currentStory.dealerCost.toLocaleString();
-            document.getElementById('detailSaved').textContent='$'+currentStory.saved.toLocaleString();
-            document.getElementById('detailVerdict').textContent=currentStory.verdict;
-            document.getElementById('detailProTip').innerHTML=`<strong>Pro Tip:</strong> ${currentStory.proTip}`;
-            
-            window.scrollTo(0,0);
-        }
-
-        function showHome(){
-            document.getElementById('mainContent').style.display='block';
-            document.querySelector('.hero').style.display='flex';
-            document.querySelector('.nav').style.display='flex';
-            document.getElementById('mainFooter').style.display='block';
-            document.getElementById('detailView').classList.remove('active');
-            document.getElementById('submitModal').classList.remove('active');
-            window.scrollTo(0,0);
-        }
-
-        function openModal(){
-            document.getElementById('submitModal').classList.add('active');
-        }
-
-        function closeModal(){
-            document.getElementById('submitModal').classList.remove('active');
-        }
-
-        function submitStory(e){
-            e.preventDefault();
-            alert('Thanks for your submission! We\'ll review and add it to the database soon.');
-            closeModal();
-            document.querySelector('form').reset();
-        }
-
-        function markHelpful(){
-            if(!currentStory)return;
-            currentStory.success++;
-            document.getElementById('helpfulText').textContent='Thanks! (+1)';
-            setTimeout(()=>{
-                document.getElementById('helpfulText').textContent='This Fixed My Car';
-            },2000);
-        }
-
-        function updateStats(){
-            const totalSaved=stories.reduce((a,s)=>a+s.saved,0);
-            document.getElementById('statTotal').textContent=stories.length;
-        }
-
-        window.onclick=function(e){
-            if(e.target===document.getElementById('submitModal')){
-                closeModal();
-            }
-        }
-
-        init();
-    </script>
-</body>
-</html>
+                img:'https://
